@@ -68,7 +68,7 @@ namespace WusClient
             }
             if (!File.Exists(instance))
             {
-                Console.WriteLine("Unable to find the sample instance document.");
+                Console.WriteLine($"Unable to find the sample instance document: {instance}");
                 Environment.Exit(-1);
             }
 
@@ -170,6 +170,7 @@ namespace WusClient
 
         public static X509Certificate2 FindCertificate(string thumbprint)
         {
+            bool verifyChain = false; // should be true, but using a test certificate now
             using (X509Store certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser))
             {
                 certStore.Open(OpenFlags.ReadOnly);
@@ -177,7 +178,7 @@ namespace WusClient
                 X509Certificate2Collection certCollection = certStore.Certificates.Find(
                     X509FindType.FindByThumbprint,
                     thumbprint,
-                    false);
+                    verifyChain);
 
                 if (certCollection.Count > 0)
                 {

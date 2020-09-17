@@ -1,8 +1,8 @@
 # wus.core
 
-**wus.core** is a .NET Core C# example on how to communicate with Digipoort, the Dutch government gateway for exchanging xbrl data. The Digipoort API interface uses SOAP based webservices following the *WUS 2.0* protocol. This example assumes you are familiar with Digipoort and its purpose.
+**wus.core** is a .NET Core C# example on how to communicate with Digipoort, the Dutch government gateway for exchanging XBRL data. The Digipoort API interface uses SOAP based webservices following the *WUS 2.0* protocol. This example assumes you are familiar with Digipoort and its purpose.
 
-Most of the existing C# wus 2.0 examples use the Windows Communication Foundation (WCF) framework, but Microsoft will not be porting this full framework to .NET Core as it is too tightly coupled to the Windows operating system.
+Most of the existing C# WUS 2.0 examples use the Windows Communication Foundation (WCF) framework, but Microsoft will not be porting this full framework to .NET Core as it is too tightly coupled to the Windows operating system.
 
 There are projects like [CoreWCF](https://github.com/CoreWCF/CoreWCF) to enable WCF on .NET Core, but at this time there is no support for **message security**. And without message security it is not possible to have all the WS-* protocol support (Addressing, Security and Digital signatures) required by *WUS 2.0.*
 
@@ -20,7 +20,7 @@ This C# example has its own WS-* protocol implementation, with the main part loc
 - Get a copy of this example using: `git clone https://github.com/pkortekaas/wus.core.git`
 - Do a `dotnet restore` to get all the dependency modules
 - Main entrypoint is in WusClient/Program.cs
-- Make sure your PKIo certifcate can be found, either through the certificate store of from the local filesystem
+- Make sure your PKIo certifcate can be found, either through the certificate store or from the local filesystem
 - You should be all set to run: `dotnet run -p WusClient` from the solution directory
 - The sample code runs again the Digipoort conformance or preprod environment
 

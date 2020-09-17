@@ -6,6 +6,9 @@ namespace CoreWUS
 {
     internal class KeyInfoSecurityToken : KeyInfoClause
     {
+        private static readonly string _schema = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
+        private static readonly string _valueType = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3";
+
         public string TokenId { get; set; }
         public string Prefix { get; set; }
 
@@ -21,13 +24,14 @@ namespace CoreWUS
 
         public override XmlElement GetXml()
         {
-            string mask = @"<{0}:SecurityTokenReference xmlns:{0}=""http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd"">
-        <{0}:Reference URI=""#{1}"" ValueType=""http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3""/>
-    </{0}:SecurityTokenReference>";
+            string xml = $@"<{Prefix}:SecurityTokenReference xmlns:{Prefix}=""{_schema}"">
+                <{Prefix}:Reference URI=""#{TokenId}"" ValueType=""{_valueType}""/>
+            </{Prefix}:SecurityTokenReference>";
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml(string.Format(mask, Prefix, TokenId));
+            doc.LoadXml(xml);
             return doc.DocumentElement;
         }
+
         public override void LoadXml(XmlElement value)
         {
             throw new NotImplementedException();

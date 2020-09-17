@@ -157,7 +157,7 @@ namespace CoreWUS
                             ),
                             new XElement( a + "MessageID",
                                 new XAttribute(u + "Id", _address1Id),
-                                string.Format("urn:uuid:{0}", Guid.NewGuid().ToString("D"))
+                                $"urn:uuid:{Guid.NewGuid():D}"
                             ),
                             new XElement( a + "ReplyTo",
                                 new XAttribute(u + "Id", _address2Id),
