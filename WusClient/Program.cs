@@ -89,7 +89,7 @@ namespace WusClient
                 },
                 rolBelanghebbende = "Bedrijf",
                 berichtInhoud = new berichtInhoudType() {
-                    mimeType = "test/xml",
+                    mimeType = "text/xml",
                     bestandsnaam = "Omzetbelasting.xbrl",
                     inhoud = File.ReadAllBytes(instance)
                 }
