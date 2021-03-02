@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Xml;
 using System.Xml.Serialization;
@@ -6,6 +7,7 @@ namespace CoreWUS.Serialization
 {
     public static class Serializer
     {
+        [SuppressMessage("Microsoft.CodeAnalysis.FxCopAnalyzers", "CA5369:PotentialUnsafeOverload")]
         public static T Deserialize<T>(string input) where T : class
         {
             XmlSerializer ser = new XmlSerializer(typeof(T));

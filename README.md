@@ -6,7 +6,7 @@ Most of the existing C# WUS 2.0 examples use the Windows Communication Foundatio
 
 There are projects like [CoreWCF](https://github.com/CoreWCF/CoreWCF) to enable WCF on .NET Core, but at this time there is no support for **message security**. And without message security it is not possible to have all the WS-* protocol support (Addressing, Security and Digital signatures) required by *WUS 2.0.*
 
-The most likely successor to WCF on .NET Core will become [gRPC](https://grpc.io/), however this framework will no longer support [WS-* protocols](https://docs.microsoft.com/en-us/dotnet/architecture/grpc-for-wcf-developers/ws-protocols)
+The recommended successor to WCF on .NET Core is [gRPC](https://grpc.io/), however this framework will no longer support [WS-* protocols](https://docs.microsoft.com/en-us/dotnet/architecture/grpc-for-wcf-developers/ws-protocols)
 
 This C# example has its own WS-* protocol implementation, with the main part located in the **WusXmlDSig.cs** file. The rest of the implementation is pretty straightforward, using LINQ to XML, serializers, extensions and exceptions.
 

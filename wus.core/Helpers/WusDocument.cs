@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
@@ -31,26 +32,27 @@ namespace CoreWUS
 {
     internal class WusDocument
     {
-        private static readonly XNamespace s = "http://schemas.xmlsoap.org/soap/envelope/";
-        private static readonly XNamespace xsi = "http://www.w3.org/2001/XMLSchema-instance";
-        private static readonly XNamespace xsd = "http://www.w3.org/2001/XMLSchema";
-        private static readonly XNamespace u = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd";
-        private static readonly XNamespace o ="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
-        private static readonly XNamespace a = "http://www.w3.org/2005/08/addressing";
+        private readonly XNamespace s = "http://schemas.xmlsoap.org/soap/envelope/";
+        private readonly XNamespace xsi = "http://www.w3.org/2001/XMLSchema-instance";
+        private readonly XNamespace xsd = "http://www.w3.org/2001/XMLSchema";
+        private readonly XNamespace u = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd";
+        private readonly XNamespace o ="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
+        private readonly XNamespace a = "http://www.w3.org/2005/08/addressing";
 
-        private static readonly string _bodyId = "body_0";
-        private static readonly string _timestampId = "timestamp_0";
-        private static readonly string _address0Id = "address_0";
-        private static readonly string _address1Id = "address_1";
-        private static readonly string _address2Id = "address_2";
-        private static readonly string _address3Id = "address_3";
-        private static readonly string _tokenId = "sec_0";
-        private static readonly string _tokenPrefix = "o";
+        private const string _bodyId = "body_0";
+        private const string _timestampId = "timestamp_0";
+        private const string _address0Id = "address_0";
+        private const string _address1Id = "address_1";
+        private const string _address2Id = "address_2";
+        private const string _address3Id = "address_3";
+        private const string _tokenId = "sec_0";
+        private const string _tokenPrefix = "o";
 
-        private static readonly string _tokenValueType = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3";
-        private static readonly string _tokenEncodingType ="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary";
+        private const string _tokenValueType = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3";
+        private const string _tokenEncodingType ="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary";
 
         private readonly IWusXmlDSig _xmlDSig;
+        private readonly ILogger _logger;
 
         internal XDocument Envelope { get; private set; }
 
@@ -59,18 +61,19 @@ namespace CoreWUS
         private Uri _url;
         private X509Certificate2 _signingCertificate;
 
-        public WusDocument(IWusXmlDSig xmlDSig)
+        public WusDocument(IWusXmlDSig xmlDSig, ILogger logger)
         {
-            Logger.Verbose("Start");
+            _logger = logger;
+            _logger?.Log(LogLevel.Verbose, "Start");
             Envelope = null;
             _xmlDSig = xmlDSig;
             _xmlDSig.SetSecurityToken(_tokenId, _tokenPrefix);
-            Logger.Verbose("End");
+            _logger?.Log(LogLevel.Verbose, "End");
         }
 
-        public byte[] CreateDocument()
+        public byte[] CreateDocumentBytes()
         {
-            Logger.Verbose("Start");
+            _logger?.Log(LogLevel.Verbose, "Start");
             try
             {
                 if (CreateEnvelope(_bodyElement))
@@ -90,21 +93,21 @@ namespace CoreWUS
             }
             finally
             {
-                Logger.Verbose("End");
+                _logger?.Log(LogLevel.Verbose, "End");
             }
             return null;
         }
 
         public WusDocument WithEnvelope(XElement bodyElement)
         {
-            Logger.Verbose("Passthrough");
+            _logger?.Log(LogLevel.Verbose, "Passthrough");
             _bodyElement = bodyElement;
             return this;
         }
 
         public WusDocument WithAddressing(string action, Uri url)
         {
-            Logger.Verbose("Passthrough");
+            _logger?.Log(LogLevel.Verbose, "Passthrough");
             _action = action;
             _url = url;
             return this;
@@ -112,14 +115,14 @@ namespace CoreWUS
 
         public WusDocument WithSignature(X509Certificate2 certificate)
         {
-            Logger.Verbose("Passthrough");
+            _logger?.Log(LogLevel.Verbose, "Passthrough");
             _signingCertificate = certificate;
             return this;
         }
 
         private bool CreateEnvelope(XElement bodyElement)
         {
-            Logger.Verbose("Start");
+            _logger?.Log(LogLevel.Verbose, "Start");
 
             Envelope = new XDocument
             (
@@ -137,13 +140,13 @@ namespace CoreWUS
                 )
             );
 
-            Logger.Verbose("End");
+            _logger?.Log(LogLevel.Verbose, "End");
             return true;
         }
 
         private bool AddAddressing(string action, Uri url)
         {
-            Logger.Verbose("Start");
+            _logger?.Log(LogLevel.Verbose, "Start");
             bool result = false;
 
             XElement header = Envelope.Root.Elements().FirstOrDefault(e => e.Name.LocalName == "Header");
@@ -171,13 +174,13 @@ namespace CoreWUS
                 result = true;
             }
 
-            Logger.Verbose("End");
+            _logger?.Log(LogLevel.Verbose, "End");
             return result;
         }
 
         private bool AddSecurity(string token)
         {
-            Logger.Verbose("Start");
+            _logger?.Log(LogLevel.Verbose, "Start");
             bool result = false;
 
             XElement header = Envelope.Root.Elements().FirstOrDefault(e => e.Name.LocalName == "Header");
@@ -189,8 +192,8 @@ namespace CoreWUS
                                 new XAttribute(s + "mustUnderstand", "1"),
                                 new XElement(u + "Timestamp",
                                     new XAttribute(u + "Id", _timestampId),
-                                    new XElement( u + "Created", now.ToString("yyyy-MM-ddTHH:mm:ssZ")),
-                                    new XElement( u + "Expires", now.AddMinutes(5).ToString("yyyy-MM-ddTHH:mm:ssZ"))),
+                                    new XElement( u + "Created", now.ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture)),
+                                    new XElement( u + "Expires", now.AddMinutes(5).ToString("yyyy-MM-ddTHH:mm:ssZ", CultureInfo.InvariantCulture))),
                                 new XElement(o + "BinarySecurityToken",
                                     new XAttribute(u + "Id", _tokenId),
                                     new XAttribute("ValueType", _tokenValueType),
@@ -202,13 +205,13 @@ namespace CoreWUS
                 result = true;
             }
 
-            Logger.Verbose("End");
+            _logger?.Log(LogLevel.Verbose, "End");
             return result;
         }
 
         private bool AddSignature(X509Certificate2 certificate)
         {
-            Logger.Verbose("Start");
+            _logger?.Log(LogLevel.Verbose, "Start");
             bool result = AddSecurity(Convert.ToBase64String(certificate.RawData));
 
             XElement security = Envelope.Root.Descendants().FirstOrDefault(e => e.Name.LocalName == "Security");
@@ -221,7 +224,7 @@ namespace CoreWUS
                 result = true;
             }
 
-            Logger.Verbose("End");
+            _logger?.Log(LogLevel.Verbose, "End");
             return result;
         }
     }

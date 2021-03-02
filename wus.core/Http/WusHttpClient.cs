@@ -8,22 +8,24 @@ using System.Threading.Tasks;
 
 namespace CoreWUS.Http
 {
-    public class WusHttpClient : IWusHttpClient
+    public sealed class WusHttpClient : IWusHttpClient
     {
         private readonly HttpClient _client;
+        private ILogger _logger;
 
-        public WusHttpClient(Uri baseUri, X509Certificate2 clientCertificate, string serverThumbprint)
+        public WusHttpClient(Uri baseUri, X509Certificate2 clientCertificate, string serverThumbprint, ILogger logger)
         {
-            _client = HttpClientFactory.Create(baseUri, clientCertificate, serverThumbprint);
+            _logger = logger;
+            _client = HttpClientFactory.Create(baseUri, clientCertificate, serverThumbprint, logger);
         }
 
         public string Post(Uri url, string soapAction, byte[] data)
         {
-            Logger.Verbose("Start");
+            _logger?.Log(LogLevel.Verbose, "Start");
             HttpResponseMessage response = PostAsync(url, soapAction, data).Result;
             if (response.IsSuccessStatusCode)
             {
-                Logger.Verbose("End");
+                _logger?.Log(LogLevel.Verbose, "End");
                 return response.Content.ReadAsStringAsync().Result;
             }
             throw new HttpException(response.StatusCode);
@@ -31,11 +33,13 @@ namespace CoreWUS.Http
 
         private async Task<HttpResponseMessage> PostAsync(Uri url, string soapAction, byte[] data)
         {
-            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url);
-            request.Content = new ByteArrayContent(data);
-            request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
-            request.Content.Headers.Add("SOAPAction", soapAction);
-            return await _client.SendAsync(request);
+            using (HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, url))
+            {
+                request.Content = new ByteArrayContent(data);
+                request.Content.Headers.ContentType = new MediaTypeHeaderValue("text/xml");
+                request.Content.Headers.Add("SOAPAction", soapAction);
+                return await _client.SendAsync(request).ConfigureAwait(false);
+            }
         }
     }
 }

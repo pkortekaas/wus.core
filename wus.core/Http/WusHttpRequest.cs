@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -9,22 +10,26 @@ using CoreWUS.Extensions;
 // https://github.com/pierodetomi/dotnet-webutils/tree/master/DotNet.WebUtils
 namespace CoreWUS
 {
-    public class SyncHttpClient : IWusHttpClient
+    public sealed class WusHttpRequest : IWusHttpClient
     {
-        Uri _baseUri;
-        X509Certificate2 _clientCertificate;
-        string _serverThumbprint;
+        private readonly Uri _baseUri;
+        private readonly X509Certificate2 _clientCertificate;
+        private readonly string _serverThumbprint;
+        private ILogger _logger;
 
-        public SyncHttpClient(Uri baseUri, X509Certificate2 clientCertificate, string serverThumbprint)
+        public WusHttpRequest(Uri baseUri, X509Certificate2 clientCertificate, string serverThumbprint, ILogger logger)
         {
             _baseUri = baseUri;
             _clientCertificate = clientCertificate;
             _serverThumbprint = serverThumbprint;
+            _logger = logger;
         }
 
         public string Post(Uri url, string soapAction, byte[] data)
         {
-            Logger.Verbose("Start");
+            _logger?.Log(LogLevel.Verbose, "Start");
+            Contract.Requires(data != null);
+
             string path = new Uri(_baseUri, url).AbsoluteUri;
             HttpWebRequest request = CreateRequest(HttpMethod.Post, path);
 
@@ -33,18 +38,17 @@ namespace CoreWUS
             request.Headers.Add("SOAPAction", soapAction);
 
             string result = ExecutePostRequest(request, data);
-            Logger.Verbose("End");
+            _logger?.Log(LogLevel.Verbose, "End");
             return result;
         }
 
-        private string ExecutePostRequest(HttpWebRequest request, byte[] body)
+        private static string ExecutePostRequest(HttpWebRequest request, byte[] body)
         {
             string data = null;
 
             using (Stream requestStream = request.GetRequestStream())
             {
                 requestStream.Write(body, 0, body.Length);
-                requestStream.Close();
             }
 
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
@@ -72,13 +76,13 @@ namespace CoreWUS
         private HttpWebRequest CreateRequest(HttpMethod method, string url)
         {
             HttpWebRequest request = WebRequest.CreateHttp(url);
-            request.Method = method.ToString().ToUpper();
+            request.Method = method.ToString().ToUpperInvariant();
             request.ClientCertificates.Add(_clientCertificate);
             request.ServerCertificateValidationCallback = (message, cert, chain, errors) =>
             {
                 X509Certificate2 cert2 = cert as X509Certificate2;
                 bool valid = cert2.Thumbprint == _serverThumbprint;
-                Logger.Debug($"Validate server certificate: {cert2.Thumbprint} {valid}");
+                _logger?.Log(valid ? LogLevel.Debug : LogLevel.Error, $"Validate server certificate: {cert2.Thumbprint} {valid}");
                 return valid;
             };
 

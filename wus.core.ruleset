@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<RuleSet Name="All Rules Disabled" Description="All Rules are disabled." ToolsVersion="15.0">
+   <Rules AnalyzerId="Microsoft.CodeAnalysis.FxCopAnalyzers" RuleNamespace="Microsoft.CodeAnalysis.FxCopAnalyzers">
+      <Rule Id="CA9998" Action="None" />        <!-- FxCopAnalyzers deprecated warning -->
+      <Rule Id="CA1051" Action="None" />        <!-- Do not declare visible instance fields -->
+   </Rules>
+</RuleSet>

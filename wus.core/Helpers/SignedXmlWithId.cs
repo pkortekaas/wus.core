@@ -5,7 +5,7 @@ namespace CoreWUS
 {
     internal class SignedXmlWithId : SignedXml
     {
-        private XmlNamespaceManager _nsManager = null;
+        private XmlNamespaceManager _nsManager;
 
         public SignedXmlWithId()
             : base()

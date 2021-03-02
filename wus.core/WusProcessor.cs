@@ -35,79 +35,81 @@ using CoreWUS.Extensions;
 
 namespace CoreWUS
 {
-    public class WusProcessor
+    public sealed class WusProcessor
     {
         private readonly XmlWriterSettings _xmlWriterSettings;
-        private readonly IWusHttpClient _wusHttpClient;
-        private readonly IWusXmlDSig _wusXmlDSig;
+        private readonly IWusHttpClient _httpClient;
+        private readonly IWusXmlDSig _xmlDSig;
         private readonly X509Certificate2 _signingCertificate;
+        private readonly ILogger _logger;
 
-        private static readonly string _deliverAction = "http://logius.nl/digipoort/wus/2.0/aanleverservice/1.2/AanleverService/aanleverenRequest";
-        private static readonly string _newStatusAction = "http://logius.nl/digipoort/wus/2.0/statusinformatieservice/1.2/StatusinformatieService/getNieuweStatussenProcesRequest";
-        private static readonly string _allStatusAction = "http://logius.nl/digipoort/wus/2.0/statusinformatieservice/1.2/StatusinformatieService/getStatussenProcesRequest";
+        private const string _deliverAction = "http://logius.nl/digipoort/wus/2.0/aanleverservice/1.2/AanleverService/aanleverenRequest";
+        private const string _newStatusAction = "http://logius.nl/digipoort/wus/2.0/statusinformatieservice/1.2/StatusinformatieService/getNieuweStatussenProcesRequest";
+        private const string _allStatusAction = "http://logius.nl/digipoort/wus/2.0/statusinformatieservice/1.2/StatusinformatieService/getStatussenProcesRequest";
 
-        public WusProcessor(IWusHttpClient client, IWusXmlDSig xmlDSig, X509Certificate2 signingCertificate)
+        public WusProcessor(IWusHttpClient client, ILogger logger, X509Certificate2 signingCertificate)
         {
-            Logger.Verbose("Start");
+            _logger = logger;
+            _logger?.Log(LogLevel.Verbose, "Start");
             _xmlWriterSettings = new XmlWriterSettings
             {
                 Encoding = Encoding.UTF8,
                 Indent = false,
                 OmitXmlDeclaration = true
             };
+            _xmlDSig = new WusXmlDSig(logger);
             _signingCertificate = signingCertificate;
-            _wusXmlDSig = xmlDSig;
-            _wusHttpClient = client;
-            Logger.Verbose("End");
+            _httpClient = client;
+            _logger?.Log(LogLevel.Verbose, "End");
         }
 
         public aanleverResponse Deliver(aanleverRequest request, Uri url)
         {
-            Logger.Verbose("Passthrough");
+            _logger?.Log(LogLevel.Verbose, "Passthrough");
             return Post<aanleverResponse>(request.ToXElement(_xmlWriterSettings), url, _deliverAction);
         }
 
         public IEnumerable<StatusResultaat> NewStatusProcess(getNieuweStatussenProcesRequest request, Uri url)
         {
-            Logger.Verbose("Passthrough");
+            _logger?.Log(LogLevel.Verbose, "Passthrough");
             return Post<getNieuweStatussenProcesResponse>(request.ToXElement(_xmlWriterSettings), url, _newStatusAction).
                         getNieuweStatussenProcesReturn;
         }
 
         public IEnumerable<StatusResultaat> AllStatusProcess(getStatussenProcesRequest request, Uri url)
         {
-            Logger.Verbose("Passthrough");
+            _logger?.Log(LogLevel.Verbose, "Passthrough");
             return Post<getStatussenProcesResponse>(request.ToXElement(_xmlWriterSettings), url, _allStatusAction).
                         getStatussenProcesReturn;
         }
 
         private T Post<T>(XElement body, Uri url, string soapAction) where T: class
         {
-            Logger.Verbose("Start");
+            _logger?.Log(LogLevel.Verbose, "Start");
             try
             {
-                byte[] docBytes = new WusDocument(_wusXmlDSig)
+                byte[] docBytes = new WusDocument(_xmlDSig, _logger)
                     .WithEnvelope(body)
                     .WithAddressing(soapAction, url)
                     .WithSignature(_signingCertificate)
-                    .CreateDocument();
+                    .CreateDocumentBytes();
 
                 if (docBytes != null)
                 {
-                    string response = _wusHttpClient.Post(url, soapAction, docBytes);
+                    string response = _httpClient.Post(url, soapAction, docBytes);
                     return HandleResponse<T>(response);
                 }
             }
             finally
             {
-                Logger.Verbose("End");
+                _logger?.Log(LogLevel.Verbose, "End");
             }
-            return default(T);
+            return default;
         }
 
         private T HandleResponse<T>(string response) where T: class
         {
-            Logger.Verbose("Start");
+            _logger?.Log(LogLevel.Verbose, "Start");
             XDocument xDoc = XDocument.Parse(response);
             XElement body = xDoc.Root.Elements().FirstOrDefault(e => e.Name.LocalName == "Body");
             try
@@ -138,7 +140,7 @@ namespace CoreWUS
                         throw new SoapException(msg, code, actor);
                     }
 
-                    if (!_wusXmlDSig.VerifyXmlDSig(response))
+                    if (!_xmlDSig.VerifyXmlDSig(response))
                     {
                         throw new VerificationException("XmlDSig signature verification failed.");
                     }
@@ -151,14 +153,14 @@ namespace CoreWUS
                 }
                 else
                 {
-                    Logger.Warn("No Body element in response");
+                    _logger?.Log(LogLevel.Warning, "No Body element in response");
                 }
             }
             finally
             {
-                Logger.Verbose("End");
+                _logger?.Log(LogLevel.Verbose, "End");
             }
-            return default(T);
+            return default;
         }
 
     }

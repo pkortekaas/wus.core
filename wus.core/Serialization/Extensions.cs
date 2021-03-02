@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Contracts;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -9,7 +10,7 @@ using CoreWUS.Serialization;
 
 namespace CoreWUS.Extensions
 {
-    public static class Extensions
+    public static class WusExtensions
     {
         public static string ToXml<T>(this T value, XmlWriterSettings settings) where T: class
         {
@@ -63,6 +64,7 @@ namespace CoreWUS.Extensions
 
         public static bool IsSuccessStatusCode<T>(this T value) where T: HttpWebResponse
         {
+            Contract.Requires(value != null);
             return ((int)value.StatusCode >= 200) && ((int)value.StatusCode <= 299);
         }
     }

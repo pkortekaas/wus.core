@@ -27,7 +27,6 @@ using System.IO;
 using System.Security.Cryptography.X509Certificates;
 using CoreWUS;
 using CoreWUS.Http;
-using Serilog;
 
 namespace WusClient
 {
@@ -98,71 +97,62 @@ namespace WusClient
             //using (X509Certificate2 cert = new X509Certificate2("filename", "password"))
             using (X509Certificate2 cert = FindCertificate(myPKIoThumbprint))
             {
+                ILogger logger = new Logger(LogLevel.Verbose);
+
                 try
                 {
-                    var logLevel = new Serilog.Core.LoggingLevelSwitch();
-
-                    Serilog.Log.Logger = new LoggerConfiguration()
-                                .WriteTo.Console()
-                                .MinimumLevel.ControlledBy(logLevel)
-                                .CreateLogger();
-
-                    logLevel.MinimumLevel = Serilog.Events.LogEventLevel.Debug;
-
-                    IWusHttpClient wusHttpClient = new WusHttpClient(new Uri(baseUrl), cert, serverCertificateThumbprint);
-                    IWusXmlDSig xmlDSig = new WusXmlDSig();
-
-                    Logger.Info("Startup");
-                    WusProcessor wp = new WusProcessor(wusHttpClient, xmlDSig, cert);
+                    logger.Log(LogLevel.Info, "Startup");
+                    IWusHttpClient wusHttpClient = new WusHttpClient(new Uri(baseUrl), cert, serverCertificateThumbprint, logger);
+                    WusProcessor wp = new WusProcessor(wusHttpClient, logger, cert);
 
                     if (string.IsNullOrEmpty(reference))
                     {
-                        Logger.Info("-------------------- Deliver --------------------");
+                        logger.Log(LogLevel.Info, "-------------------- Deliver --------------------");
                         aanleverResponse response = wp.Deliver(request, new Uri(deliveryUrl));
                         reference = response.kenmerk;
-                        Logger.Info($"Aanleverkenmerk: {response.aanleverkenmerk}");
-                        Logger.Info($"Kenmerk: {reference}");
+                        logger.Log(LogLevel.Info, $"Aanleverkenmerk: {response.aanleverkenmerk}");
+                        logger.Log(LogLevel.Info, $"Kenmerk: {reference}");
                     }
 
-                    Logger.Info("------------------- New Status ------------------");
+                    logger.Log(LogLevel.Info, "------------------- New Status ------------------");
                     getNieuweStatussenProcesRequest statusNewRequest = new getNieuweStatussenProcesRequest();
                     statusNewRequest.kenmerk = reference;
                     statusNewRequest.autorisatieAdres = noAusp;
                     IEnumerable<StatusResultaat> statusResponse = wp.NewStatusProcess(statusNewRequest, new Uri(statusUrl));
                     foreach (StatusResultaat statusResultaat in statusResponse)
                     {
-                        Logger.Info($"Status: {statusResultaat.statuscode} - {statusResultaat.statusomschrijving}");
+                        logger.Log(LogLevel.Info, $"Status: {statusResultaat.statuscode} - {statusResultaat.statusomschrijving}");
                     }
 
-                    Logger.Info("------------------- All Status ------------------");
+                    logger.Log(LogLevel.Info, "------------------- All Status ------------------");
                     getStatussenProcesRequest statusAllRequest = new getStatussenProcesRequest();
                     statusAllRequest.kenmerk = reference;
                     statusAllRequest.autorisatieAdres = noAusp;
                     statusResponse = wp.AllStatusProcess(statusAllRequest, new Uri(statusUrl));
                     foreach (StatusResultaat statusResultaat in statusResponse)
                     {
-                        Logger.Info($"Status: {statusResultaat.statuscode} - {statusResultaat.statusomschrijving}");
+                        logger.Log(LogLevel.Info, $"Status: {statusResultaat.statuscode} - {statusResultaat.statusomschrijving}");
                     }
                 }
                 catch (WusException e)
                 {
-                    Logger.Error(e, $"WusException: {e.WusCode} - {e.WusMessage}");
+                    logger.Log(LogLevel.Error, $"WusException: {e.WusCode} - {e.WusMessage}", e);
                 }
                 catch (SoapException e)
                 {
-                    Logger.Error($"SoapException: {e.Code} - {e.Message}");
+                    logger.Log(LogLevel.Error, $"SoapException: {e.Code} - {e.Message}");
                 }
                 catch (HttpException e)
                 {
-                    Logger.Error($"HttpException: {e.Code} - {e.Message}");
+                    logger.Log(LogLevel.Error, $"HttpException: {e.Code} - {e.Message}");
                 }
                 catch (Exception e)
                 {
-                    Logger.Error($"Exception: {e.Message}");
+                    logger.Log(LogLevel.Error, $"Exception: {e.Message}");
                 }
                 finally
                 {
-                    Logger.Info("Shutdown");
+                    logger.Log(LogLevel.Info, "Shutdown");
                 }
             }
 

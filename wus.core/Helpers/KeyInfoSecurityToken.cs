@@ -6,8 +6,8 @@ namespace CoreWUS
 {
     internal class KeyInfoSecurityToken : KeyInfoClause
     {
-        private static readonly string _schema = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
-        private static readonly string _valueType = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3";
+        private const string _schema = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
+        private const string _valueType = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3";
 
         public string TokenId { get; set; }
         public string Prefix { get; set; }

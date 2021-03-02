@@ -28,30 +28,32 @@ using System.Xml;
 
 namespace CoreWUS
 {
-    public class WusXmlDSig : IWusXmlDSig
+    internal sealed class WusXmlDSig : IWusXmlDSig
     {
         private string _tokenId;
         private string _tokenPrefix;
+        private readonly ILogger _logger;
 
-        public WusXmlDSig()
+        public WusXmlDSig(ILogger logger)
         {
-            Logger.Verbose("Start");
+            _logger = logger;
+            _logger?.Log(LogLevel.Verbose, "Start");
             _tokenId = "sec_0";
             _tokenPrefix = "o";
-            Logger.Verbose("End");
+            _logger?.Log(LogLevel.Verbose, "End");
         }
 
         public void SetSecurityToken(string tokenId, string tokenPrefix)
         {
-            Logger.Verbose("Start");
+            _logger?.Log(LogLevel.Verbose, "Start");
             _tokenId = tokenId;
             _tokenPrefix = tokenPrefix;
-            Logger.Verbose("End");
+            _logger?.Log(LogLevel.Verbose, "End");
         }
 
         public string SignXmlDSig(string xmlData, X509Certificate2 certificate, string[] referenceIds)
         {
-            Logger.Verbose("Start");
+            _logger?.Log(LogLevel.Verbose, "Start");
             XmlDocument xmlDocument = new XmlDocument()
             {
                 PreserveWhitespace = true
@@ -89,13 +91,13 @@ namespace CoreWUS
 
             signedXml.ComputeSignature();
             XmlElement xmlSignature = signedXml.GetXml();
-            Logger.Verbose("End");
+            _logger?.Log(LogLevel.Verbose, "End");
             return xmlSignature.OuterXml;
         }
 
         public bool VerifyXmlDSig(string xmlData)
         {
-            Logger.Verbose("Start");
+            _logger?.Log(LogLevel.Verbose, "Start");
             XmlDocument xmlDocument = new XmlDocument()
             {
                 PreserveWhitespace = true
@@ -111,7 +113,7 @@ namespace CoreWUS
                 SignedXmlWithId signedXml = new SignedXmlWithId(xmlDocument);
                 XmlNodeList nodeList = xmlDocument.GetElementsByTagName("Signature");
                 signedXml.LoadXml((XmlElement)nodeList[0]);
-                Logger.Verbose("End");
+                _logger?.Log(LogLevel.Verbose, "End");
                 // cert.PublicKey.Key
                 return signedXml.CheckSignature(cert, true);
             }
