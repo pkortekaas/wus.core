@@ -4,8 +4,8 @@ namespace CoreWUS
 {
     public interface IWusXmlDSig
     {
-        string SignXmlDSig(string xmlData, X509Certificate2 certificate, string[] referenceIds);
-        bool VerifyXmlDSig(string xmlData);
+        string CreateSignature(string xmlData, X509Certificate2 certificate, string[] referenceIds);
+        bool VerifySignature(string xmlData);
         void SetSecurityToken(string tokenId, string tokenPrefix);
     }
 }

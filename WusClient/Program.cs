@@ -115,9 +115,11 @@ namespace WusClient
                     }
 
                     logger.Log(LogLevel.Info, "------------------- New Status ------------------");
-                    getNieuweStatussenProcesRequest statusNewRequest = new getNieuweStatussenProcesRequest();
-                    statusNewRequest.kenmerk = reference;
-                    statusNewRequest.autorisatieAdres = noAusp;
+                    getNieuweStatussenProcesRequest statusNewRequest = new getNieuweStatussenProcesRequest()
+                    {
+                        kenmerk = reference,
+                        autorisatieAdres = noAusp
+                    };
                     IEnumerable<StatusResultaat> statusResponse = wp.NewStatusProcess(statusNewRequest, new Uri(statusUrl));
                     foreach (StatusResultaat statusResultaat in statusResponse)
                     {
@@ -125,9 +127,11 @@ namespace WusClient
                     }
 
                     logger.Log(LogLevel.Info, "------------------- All Status ------------------");
-                    getStatussenProcesRequest statusAllRequest = new getStatussenProcesRequest();
-                    statusAllRequest.kenmerk = reference;
-                    statusAllRequest.autorisatieAdres = noAusp;
+                    getStatussenProcesRequest statusAllRequest = new getStatussenProcesRequest()
+                    {
+                        kenmerk = reference,
+                        autorisatieAdres = noAusp
+                    };
                     statusResponse = wp.AllStatusProcess(statusAllRequest, new Uri(statusUrl));
                     foreach (StatusResultaat statusResultaat in statusResponse)
                     {

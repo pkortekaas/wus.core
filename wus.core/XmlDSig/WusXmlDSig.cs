@@ -51,7 +51,7 @@ namespace CoreWUS
             _logger?.Log(LogLevel.Verbose, "End");
         }
 
-        public string SignXmlDSig(string xmlData, X509Certificate2 certificate, string[] referenceIds)
+        public string CreateSignature(string xmlData, X509Certificate2 certificate, string[] referenceIds)
         {
             _logger?.Log(LogLevel.Verbose, "Start");
             XmlDocument xmlDocument = new XmlDocument()
@@ -95,7 +95,7 @@ namespace CoreWUS
             return xmlSignature.OuterXml;
         }
 
-        public bool VerifyXmlDSig(string xmlData)
+        public bool VerifySignature(string xmlData)
         {
             _logger?.Log(LogLevel.Verbose, "Start");
             XmlDocument xmlDocument = new XmlDocument()
@@ -106,6 +106,7 @@ namespace CoreWUS
             XmlNode securityTokenNode = xmlDocument.SelectSingleNode("//*[local-name()='BinarySecurityToken']");
             if (securityTokenNode == null)
             {
+                _logger?.Log(LogLevel.Error, "No BinarySecurityToken found");
                 return false;
             }
             using (X509Certificate2 cert = new X509Certificate2(Convert.FromBase64String(securityTokenNode.InnerText)))
@@ -114,7 +115,6 @@ namespace CoreWUS
                 XmlNodeList nodeList = xmlDocument.GetElementsByTagName("Signature");
                 signedXml.LoadXml((XmlElement)nodeList[0]);
                 _logger?.Log(LogLevel.Verbose, "End");
-                // cert.PublicKey.Key
                 return signedXml.CheckSignature(cert, true);
             }
         }

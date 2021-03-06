@@ -23,14 +23,10 @@ SOFTWARE.
 */
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
-using System.Xml.Serialization;
-using CoreWUS.Serialization;
 using CoreWUS.Extensions;
 
 namespace CoreWUS
@@ -40,6 +36,8 @@ namespace CoreWUS
         private readonly XmlWriterSettings _xmlWriterSettings;
         private readonly IWusHttpClient _httpClient;
         private readonly IWusXmlDSig _xmlDSig;
+        private readonly IWusResponse _wusResponse;
+        private readonly IWusDocument _wusDocument;
         private readonly X509Certificate2 _signingCertificate;
         private readonly ILogger _logger;
 
@@ -51,6 +49,7 @@ namespace CoreWUS
         {
             _logger = logger;
             _logger?.Log(LogLevel.Verbose, "Start");
+
             _xmlWriterSettings = new XmlWriterSettings
             {
                 Encoding = Encoding.UTF8,
@@ -58,110 +57,56 @@ namespace CoreWUS
                 OmitXmlDeclaration = true
             };
             _xmlDSig = new WusXmlDSig(logger);
+            _wusResponse = new WusResponse(_xmlDSig, logger);
+            _wusDocument = new WusDocument(_xmlDSig, logger);
             _signingCertificate = signingCertificate;
             _httpClient = client;
+
             _logger?.Log(LogLevel.Verbose, "End");
         }
 
-        public aanleverResponse Deliver(aanleverRequest request, Uri url)
+        public aanleverResponse Deliver(aanleverRequest request, Uri uri)
         {
             _logger?.Log(LogLevel.Verbose, "Passthrough");
-            return Post<aanleverResponse>(request.ToXElement(_xmlWriterSettings), url, _deliverAction);
+            return Post<aanleverResponse>(request.ToXElement(_xmlWriterSettings), uri, _deliverAction);
         }
 
-        public IEnumerable<StatusResultaat> NewStatusProcess(getNieuweStatussenProcesRequest request, Uri url)
+        public IEnumerable<StatusResultaat> NewStatusProcess(getNieuweStatussenProcesRequest request, Uri uri)
         {
             _logger?.Log(LogLevel.Verbose, "Passthrough");
-            return Post<getNieuweStatussenProcesResponse>(request.ToXElement(_xmlWriterSettings), url, _newStatusAction).
+            return Post<getNieuweStatussenProcesResponse>(request.ToXElement(_xmlWriterSettings), uri, _newStatusAction).
                         getNieuweStatussenProcesReturn;
         }
 
-        public IEnumerable<StatusResultaat> AllStatusProcess(getStatussenProcesRequest request, Uri url)
+        public IEnumerable<StatusResultaat> AllStatusProcess(getStatussenProcesRequest request, Uri uri)
         {
             _logger?.Log(LogLevel.Verbose, "Passthrough");
-            return Post<getStatussenProcesResponse>(request.ToXElement(_xmlWriterSettings), url, _allStatusAction).
+            return Post<getStatussenProcesResponse>(request.ToXElement(_xmlWriterSettings), uri, _allStatusAction).
                         getStatussenProcesReturn;
         }
 
-        private T Post<T>(XElement body, Uri url, string soapAction) where T: class
+        private T Post<T>(XElement body, Uri uri, string soapAction) where T: class
         {
             _logger?.Log(LogLevel.Verbose, "Start");
-            try
-            {
-                byte[] docBytes = new WusDocument(_xmlDSig, _logger)
-                    .WithEnvelope(body)
-                    .WithAddressing(soapAction, url)
-                    .WithSignature(_signingCertificate)
-                    .CreateDocumentBytes();
 
-                if (docBytes != null)
-                {
-                    string response = _httpClient.Post(url, soapAction, docBytes);
-                    return HandleResponse<T>(response);
-                }
-            }
-            finally
+            WusDocumentInfo wusDocumentInfo = new WusDocumentInfo()
             {
-                _logger?.Log(LogLevel.Verbose, "End");
+                Envelope = body,
+                SoapAction = soapAction,
+                Uri = uri,
+                Certificate = _signingCertificate
+            };
+
+            byte[] docBytes = _wusDocument.CreateDocumentBytes(wusDocumentInfo);
+
+            if (docBytes != null)
+            {
+                string response = _httpClient.Post(uri, soapAction, docBytes);
+                return _wusResponse.HandleResponse<T>(response);
             }
+            _logger?.Log(LogLevel.Verbose, "End");
+
             return default;
         }
-
-        private T HandleResponse<T>(string response) where T: class
-        {
-            _logger?.Log(LogLevel.Verbose, "Start");
-            XDocument xDoc = XDocument.Parse(response);
-            XElement body = xDoc.Root.Elements().FirstOrDefault(e => e.Name.LocalName == "Body");
-            try
-            {
-                if (body != null)
-                {
-                    XElement x;
-                    XElement fault = body.Elements().FirstOrDefault(e => e.Name.LocalName == "Fault");
-                    if (fault != null)
-                    {
-                        string code = fault.Element("faultcode")?.Value;
-                        string actor = fault.Element("faultactor")?.Value;
-                        string msg = fault.Element("faultstring")?.Value;
-
-                        x = fault.Descendants().FirstOrDefault(e => e.Name.LocalName == "aanleverFault" ||
-                                                                    e.Name.LocalName == "statusinformatieFault");
-                        if (x != null)
-                        {
-                            XmlRootAttribute rootAttribute = new XmlRootAttribute()
-                            {
-                                ElementName = x.Name.LocalName,
-                                Namespace = x.Name.NamespaceName
-                            };
-                            foutType ft = Serializer.Deserialize<foutType>(x.CreateReader(), rootAttribute);
-                            throw new WusException(msg, code, actor, ft.foutcode, ft.foutbeschrijving);
-                        }
-
-                        throw new SoapException(msg, code, actor);
-                    }
-
-                    if (!_xmlDSig.VerifyXmlDSig(response))
-                    {
-                        throw new VerificationException("XmlDSig signature verification failed.");
-                    }
-
-                    x = body.Elements().FirstOrDefault(e => e.Name.LocalName == typeof(T).Name);
-                    if (x != null)
-                    {
-                        return Serializer.Deserialize<T>(x.CreateReader());
-                    }
-                }
-                else
-                {
-                    _logger?.Log(LogLevel.Warning, "No Body element in response");
-                }
-            }
-            finally
-            {
-                _logger?.Log(LogLevel.Verbose, "End");
-            }
-            return default;
-        }
-
     }
 }

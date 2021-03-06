@@ -21,7 +21,7 @@ namespace CoreWUS.Http
                 handler.ServerCertificateCustomValidationCallback  = (message, cert, chain, errors) =>
                 {
                     bool valid = cert.Thumbprint == serverThumbprint;
-                    logger.Log(valid ? LogLevel.Debug : LogLevel.Error, $"Validate server certificate: {cert.Thumbprint} {valid}");
+                    logger?.Log(valid ? LogLevel.Debug : LogLevel.Error, $"Validate server certificate: {cert.Thumbprint} {valid}");
                     return valid;
                 };
                 _httpClient = new HttpClient(handler);
