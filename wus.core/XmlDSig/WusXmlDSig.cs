@@ -37,23 +37,23 @@ namespace CoreWUS
         public WusXmlDSig(ILogger logger)
         {
             _logger = logger;
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
             _tokenId = "sec_0";
             _tokenPrefix = "o";
-            _logger?.Log(LogLevel.Verbose, "End");
+            _logger?.Log(LogLevel.Debug, "End");
         }
 
         public void SetSecurityToken(string tokenId, string tokenPrefix)
         {
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
             _tokenId = tokenId;
             _tokenPrefix = tokenPrefix;
-            _logger?.Log(LogLevel.Verbose, "End");
+            _logger?.Log(LogLevel.Debug, "End");
         }
 
         public string CreateSignature(string xmlData, X509Certificate2 certificate, string[] referenceIds)
         {
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
             XmlDocument xmlDocument = new XmlDocument()
             {
                 PreserveWhitespace = true
@@ -91,13 +91,13 @@ namespace CoreWUS
 
             signedXml.ComputeSignature();
             XmlElement xmlSignature = signedXml.GetXml();
-            _logger?.Log(LogLevel.Verbose, "End");
+            _logger?.Log(LogLevel.Debug, "End");
             return xmlSignature.OuterXml;
         }
 
         public bool VerifySignature(string xmlData)
         {
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
             XmlDocument xmlDocument = new XmlDocument()
             {
                 PreserveWhitespace = true
@@ -114,7 +114,7 @@ namespace CoreWUS
                 SignedXmlWithId signedXml = new SignedXmlWithId(xmlDocument);
                 XmlNodeList nodeList = xmlDocument.GetElementsByTagName("Signature");
                 signedXml.LoadXml((XmlElement)nodeList[0]);
-                _logger?.Log(LogLevel.Verbose, "End");
+                _logger?.Log(LogLevel.Debug, "End");
                 return signedXml.CheckSignature(cert, true);
             }
         }

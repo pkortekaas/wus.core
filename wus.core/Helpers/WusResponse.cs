@@ -42,7 +42,7 @@ namespace CoreWUS
 
         public T HandleResponse<T>(string response) where T : class
         {
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
             XDocument xDoc = XDocument.Parse(response);
             XElement body = xDoc.Root.Elements().FirstOrDefault(e => e.Name.LocalName == "Body");
             try
@@ -91,7 +91,7 @@ namespace CoreWUS
             }
             finally
             {
-                _logger?.Log(LogLevel.Verbose, "End");
+                _logger?.Log(LogLevel.Debug, "End");
             }
             return default;
         }

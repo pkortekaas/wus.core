@@ -40,7 +40,7 @@ namespace WusClient
             string path = Path.GetFileName(Directory.GetCurrentDirectory());
 
             string reference = null;
-            string instance = "./xbrl/VB-01_bd-rpt-ob-aangifte-2020.xbrl";
+            string instanceFile = "./xbrl/VB-01_bd-rpt-ob-aangifte-2020.xbrl";
             string noAusp = "http://geenausp.nl";
             string scenario = "Happyflow";
             bool preprod = false;
@@ -63,11 +63,11 @@ namespace WusClient
             // Don't want to use an absolute path
             if (path == "WusClient")
             {
-                instance = "." + instance;
+                instanceFile = "." + instanceFile;
             }
-            if (!File.Exists(instance))
+            if (!File.Exists(instanceFile))
             {
-                Console.WriteLine($"Unable to find the sample instance document: {instance}");
+                Console.WriteLine($"Unable to find the sample instance document: {instanceFile}");
                 Environment.Exit(-1);
             }
 
@@ -90,20 +90,28 @@ namespace WusClient
                 berichtInhoud = new berichtInhoudType() {
                     mimeType = "text/xml",
                     bestandsnaam = "Omzetbelasting.xbrl",
-                    inhoud = File.ReadAllBytes(instance)
+                    inhoud = File.ReadAllBytes(instanceFile)
                 }
             };
 
             //using (X509Certificate2 cert = new X509Certificate2("filename", "password"))
             using (X509Certificate2 cert = FindCertificate(myPKIoThumbprint))
             {
-                ILogger logger = new Logger(LogLevel.Verbose);
+                ILogger logger = new Logger(LogLevel.Debug);
 
                 try
                 {
                     logger.Log(LogLevel.Info, "Startup");
                     IWusHttpClient wusHttpClient = new WusHttpClient(new Uri(baseUrl), cert, serverCertificateThumbprint, logger);
                     WusProcessor wp = new WusProcessor(wusHttpClient, logger, cert);
+                    wp.BeforeSend += (object sender, string data) =>
+                    {
+                        logger.Log(LogLevel.Verbose, $"Request:{Environment.NewLine}{data}");
+                    };
+                    wp.AfterResponse += (object sender, string data) =>
+                    {
+                        logger.Log(LogLevel.Verbose, $"Response:{Environment.NewLine}{data}");
+                    };
 
                     if (string.IsNullOrEmpty(reference))
                     {
@@ -160,6 +168,11 @@ namespace WusClient
                 }
             }
 
+        }
+
+        private static void Dump(object sender, string e)
+        {
+            throw new NotImplementedException();
         }
 
         public static X509Certificate2 FindCertificate(string thumbprint)

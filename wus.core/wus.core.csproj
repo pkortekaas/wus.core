@@ -2,10 +2,14 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <Description>WUS 2.0 support library</Description>
+    <Authors>Paul Kortekaas</Authors>
+    <Copyright>© 2020-2021 Paul Kortekaas</Copyright>
+    <PackageId>wus.core</PackageId>
+    <AssemblyTitle>WUS 2.0 support library</AssemblyTitle>
+    <Version>0.9.0-dev-20200306</Version>
+    <AssemblyVersion>0.9.0</AssemblyVersion>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <CodeAnalysisRuleSet>../wus.core.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
 

@@ -21,11 +21,11 @@ namespace CoreWUS.Http
 
         public string Post(Uri url, string soapAction, byte[] data)
         {
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
             HttpResponseMessage response = PostAsync(url, soapAction, data).Result;
             if (response.IsSuccessStatusCode)
             {
-                _logger?.Log(LogLevel.Verbose, "End");
+                _logger?.Log(LogLevel.Debug, "End");
                 return response.Content.ReadAsStringAsync().Result;
             }
             throw new HttpException(response.StatusCode);

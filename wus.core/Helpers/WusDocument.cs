@@ -57,15 +57,15 @@ namespace CoreWUS
         public WusDocument(IWusXmlDSig xmlDSig, ILogger logger)
         {
             _logger = logger;
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
             _xmlDSig = xmlDSig;
             _xmlDSig.SetSecurityToken(_tokenId, _tokenPrefix);
-            _logger?.Log(LogLevel.Verbose, "End");
+            _logger?.Log(LogLevel.Debug, "End");
         }
 
         public byte[] CreateDocumentBytes(WusDocumentInfo wusDocumentInfo)
         {
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
             XDocument envelope = CreateEnvelope(wusDocumentInfo.Envelope);
 
             if (envelope != null)
@@ -83,13 +83,13 @@ namespace CoreWUS
                 }
             }
 
-            _logger?.Log(LogLevel.Verbose, "End");
+            _logger?.Log(LogLevel.Debug, "End");
             return null;
         }
 
         private XDocument CreateEnvelope(XElement bodyElement)
         {
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
 
             XDocument envelope = new XDocument
             (
@@ -107,13 +107,13 @@ namespace CoreWUS
                 )
             );
 
-            _logger?.Log(LogLevel.Verbose, "End");
+            _logger?.Log(LogLevel.Debug, "End");
             return envelope;
         }
 
         private bool AddAddressing(XDocument envelope, string action, Uri uri)
         {
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
             bool result = false;
 
             XElement header = envelope.Root.Elements().FirstOrDefault(e => e.Name.LocalName == "Header");
@@ -141,13 +141,13 @@ namespace CoreWUS
                 result = true;
             }
 
-            _logger?.Log(LogLevel.Verbose, "End");
+            _logger?.Log(LogLevel.Debug, "End");
             return result;
         }
 
         private bool AddSecuritySignature(XDocument envelope, X509Certificate2 certificate)
         {
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
             bool result = AddSecurity(envelope, Convert.ToBase64String(certificate.RawData));
 
             XElement security = envelope.Root.Descendants().FirstOrDefault(e => e.Name.LocalName == "Security");
@@ -160,13 +160,13 @@ namespace CoreWUS
                 result = true;
             }
 
-            _logger?.Log(LogLevel.Verbose, "End");
+            _logger?.Log(LogLevel.Debug, "End");
             return result;
         }
 
         private bool AddSecurity(XDocument envelope, string token)
         {
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
             bool result = false;
 
             XElement header = envelope.Root.Elements().FirstOrDefault(e => e.Name.LocalName == "Header");
@@ -191,7 +191,7 @@ namespace CoreWUS
                 result = true;
             }
 
-            _logger?.Log(LogLevel.Verbose, "End");
+            _logger?.Log(LogLevel.Debug, "End");
             return result;
         }
     }

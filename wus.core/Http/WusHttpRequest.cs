@@ -27,7 +27,7 @@ namespace CoreWUS
 
         public string Post(Uri url, string soapAction, byte[] data)
         {
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
             Contract.Requires(data != null);
 
             string path = new Uri(_baseUri, url).AbsoluteUri;
@@ -38,7 +38,7 @@ namespace CoreWUS
             request.Headers.Add("SOAPAction", soapAction);
 
             string result = ExecutePostRequest(request, data);
-            _logger?.Log(LogLevel.Verbose, "End");
+            _logger?.Log(LogLevel.Debug, "End");
             return result;
         }
 

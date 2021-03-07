@@ -23,6 +23,7 @@ SOFTWARE.
 */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Xml;
@@ -45,10 +46,15 @@ namespace CoreWUS
         private const string _newStatusAction = "http://logius.nl/digipoort/wus/2.0/statusinformatieservice/1.2/StatusinformatieService/getNieuweStatussenProcesRequest";
         private const string _allStatusAction = "http://logius.nl/digipoort/wus/2.0/statusinformatieservice/1.2/StatusinformatieService/getStatussenProcesRequest";
 
+        [SuppressMessage("Microsoft.CodeAnalysis.FxCopAnalyzers", "CA1713:EventsPrefix")]
+        public event EventHandler<string> BeforeSend;
+        [SuppressMessage("Microsoft.CodeAnalysis.FxCopAnalyzers", "CA1713:EventsPrefix")]
+        public event EventHandler<string> AfterResponse;
+
         public WusProcessor(IWusHttpClient client, ILogger logger, X509Certificate2 signingCertificate)
         {
             _logger = logger;
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
 
             _xmlWriterSettings = new XmlWriterSettings
             {
@@ -62,32 +68,32 @@ namespace CoreWUS
             _signingCertificate = signingCertificate;
             _httpClient = client;
 
-            _logger?.Log(LogLevel.Verbose, "End");
+            _logger?.Log(LogLevel.Debug, "End");
         }
 
         public aanleverResponse Deliver(aanleverRequest request, Uri uri)
         {
-            _logger?.Log(LogLevel.Verbose, "Passthrough");
+            _logger?.Log(LogLevel.Debug, "Passthrough");
             return Post<aanleverResponse>(request.ToXElement(_xmlWriterSettings), uri, _deliverAction);
         }
 
         public IEnumerable<StatusResultaat> NewStatusProcess(getNieuweStatussenProcesRequest request, Uri uri)
         {
-            _logger?.Log(LogLevel.Verbose, "Passthrough");
+            _logger?.Log(LogLevel.Debug, "Passthrough");
             return Post<getNieuweStatussenProcesResponse>(request.ToXElement(_xmlWriterSettings), uri, _newStatusAction).
                         getNieuweStatussenProcesReturn;
         }
 
         public IEnumerable<StatusResultaat> AllStatusProcess(getStatussenProcesRequest request, Uri uri)
         {
-            _logger?.Log(LogLevel.Verbose, "Passthrough");
+            _logger?.Log(LogLevel.Debug, "Passthrough");
             return Post<getStatussenProcesResponse>(request.ToXElement(_xmlWriterSettings), uri, _allStatusAction).
                         getStatussenProcesReturn;
         }
 
         private T Post<T>(XElement body, Uri uri, string soapAction) where T: class
         {
-            _logger?.Log(LogLevel.Verbose, "Start");
+            _logger?.Log(LogLevel.Debug, "Start");
 
             WusDocumentInfo wusDocumentInfo = new WusDocumentInfo()
             {
@@ -101,10 +107,12 @@ namespace CoreWUS
 
             if (docBytes != null)
             {
+                BeforeSend?.Invoke(this, Encoding.UTF8.GetString(docBytes));
                 string response = _httpClient.Post(uri, soapAction, docBytes);
+                AfterResponse?.Invoke(this, response);
                 return _wusResponse.HandleResponse<T>(response);
             }
-            _logger?.Log(LogLevel.Verbose, "End");
+            _logger?.Log(LogLevel.Debug, "End");
 
             return default;
         }
