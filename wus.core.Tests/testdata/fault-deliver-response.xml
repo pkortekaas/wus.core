@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:wsa="http://www.w3.org/2005/08/addressing"><soapenv:Header><wsa:To>http://www.w3.org/2005/08/addressing/anonymous</wsa:To><wsa:MessageID>urn:uuid:fbb2d0e7-d861-408b-98b8-2708f8f3210f</wsa:MessageID><wsa:Action>http://logius.nl/digipoort/wus/2.0/aanleverservice/1.2/AanleverService/aanleveren/Fault/</wsa:Action><wsa:RelatesTo>urn:uuid:fbb2d0e7-d861-408b-98b8-2708f8f3210f</wsa:RelatesTo></soapenv:Header><soapenv:Body><soapenv:Fault><faultcode>soapenv:Client</faultcode><faultstring>Algemene fout</faultstring><faultactor>Verantwoordingsplichtige</faultactor><detail><fault:aanleverFault xmlns:fault="http://logius.nl/digipoort/koppelvlakservices/1.2/"><fault:foutcode>ALS100</fault:foutcode><fault:foutbeschrijving>Het verzoek voldoet niet aan de koppelvlakspecificaties en kan hierdoor niet door Digipoort worden verwerkt.
+
+De volgende fout is opgetreden: 
+
+</fault:foutbeschrijving></fault:aanleverFault></detail></soapenv:Fault></soapenv:Body></soapenv:Envelope>

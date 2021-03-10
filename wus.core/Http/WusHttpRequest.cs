@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -28,7 +27,8 @@ namespace CoreWUS
         public string Post(Uri url, string soapAction, byte[] data)
         {
             _logger?.Log(LogLevel.Debug, "Start");
-            Contract.Requires(data != null);
+            Utils.CheckNullArgument(url, "url");
+            Utils.CheckNullArgument(data, "data");
 
             string path = new Uri(_baseUri, url).AbsoluteUri;
             HttpWebRequest request = CreateRequest(HttpMethod.Post, path);

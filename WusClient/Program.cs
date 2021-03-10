@@ -35,6 +35,11 @@ namespace WusClient
         // run from solution folder: dotnet run -p WusClient [-- -r <reference number>]
         static void Main(string[] args)
         {
+            string[] scenarios = new string[] { "Happyflow", "AanleverFault", "StatusInformatieFault",
+                                                "Afleverfout", "Foutuitvragendepartij",
+						                        "TechnischProbleemAfleveren", "MaximaalAantalAfleverpogingen",
+                                                "ZwaarbelastAanleveren", "OverbelastAanleveren",
+                                                "ZwaarbelastStatusInformatie", "OverbelastStatusInformatie"};
             // Change for your own certificate, or use filename/password
             string myPKIoThumbprint = Environment.GetEnvironmentVariable("PKIO_THUMB");
             string path = Path.GetFileName(Directory.GetCurrentDirectory());
@@ -42,7 +47,7 @@ namespace WusClient
             string reference = null;
             string instanceFile = "./xbrl/VB-01_bd-rpt-ob-aangifte-2020.xbrl";
             string noAusp = "http://geenausp.nl";
-            string scenario = "Happyflow";
+            string scenario = scenarios[0];
             bool preprod = false;
 
             string baseUrl = "https://cs-bedrijven.procesinfrastructuur.nl";
@@ -168,11 +173,6 @@ namespace WusClient
                 }
             }
 
-        }
-
-        private static void Dump(object sender, string e)
-        {
-            throw new NotImplementedException();
         }
 
         public static X509Certificate2 FindCertificate(string thumbprint)

@@ -74,12 +74,16 @@ namespace CoreWUS
         public aanleverResponse Deliver(aanleverRequest request, Uri uri)
         {
             _logger?.Log(LogLevel.Debug, "Passthrough");
+            Utils.CheckNullArgument(request, "request");
+            Utils.CheckNullArgument(uri, "uri");
             return Post<aanleverResponse>(request.ToXElement(_xmlWriterSettings), uri, _deliverAction);
         }
 
         public IEnumerable<StatusResultaat> NewStatusProcess(getNieuweStatussenProcesRequest request, Uri uri)
         {
             _logger?.Log(LogLevel.Debug, "Passthrough");
+            Utils.CheckNullArgument(request, "request");
+            Utils.CheckNullArgument(uri, "uri");
             return Post<getNieuweStatussenProcesResponse>(request.ToXElement(_xmlWriterSettings), uri, _newStatusAction).
                         getNieuweStatussenProcesReturn;
         }
@@ -87,6 +91,8 @@ namespace CoreWUS
         public IEnumerable<StatusResultaat> AllStatusProcess(getStatussenProcesRequest request, Uri uri)
         {
             _logger?.Log(LogLevel.Debug, "Passthrough");
+            Utils.CheckNullArgument(request, "request");
+            Utils.CheckNullArgument(uri, "uri");
             return Post<getStatussenProcesResponse>(request.ToXElement(_xmlWriterSettings), uri, _allStatusAction).
                         getStatussenProcesReturn;
         }

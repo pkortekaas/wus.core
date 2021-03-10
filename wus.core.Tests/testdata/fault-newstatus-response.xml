@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header xmlns:wsa="http://www.w3.org/2005/08/addressing"><wsa:To>http://www.w3.org/2005/08/addressing/anonymous</wsa:To><wsa:MessageID>uuid:46fa8636-25f1-464e-906a-d77633427aaa</wsa:MessageID><wsa:Action>http://logius.nl/digipoort/wus/2.0/statusinformatieservice/1.2/StatusinformatieService/getNieuweStatussenProces/Fault/</wsa:Action><wsa:RelatesTo>urn:uuid:c92d0619-999e-4c3d-bc12-c9674a1aace0</wsa:RelatesTo></soapenv:Header><soapenv:Body><soapenv:Fault><faultcode>soapenv:Client</faultcode><faultstring>Algemene fout</faultstring><faultactor>Verantwoordingsplichtige</faultactor><detail><fault:statusinformatieFault xmlns:fault="http://logius.nl/digipoort/koppelvlakservices/1.2/"><fault:foutcode>STS100</fault:foutcode><fault:foutbeschrijving>Het verzoek voldoet niet aan de koppelvlakspecificaties en kan hierdoor niet door Digipoort worden verwerkt.
+
+De volgende fout is opgetreden:
+
+
+</fault:foutbeschrijving></fault:statusinformatieFault></detail></soapenv:Fault></soapenv:Body></soapenv:Envelope>

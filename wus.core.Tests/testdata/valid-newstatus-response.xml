@@ -1,0 +1,61 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Header xmlns:wsa="http://www.w3.org/2005/08/addressing"><s:Security soapenv:mustUnderstand="1" xmlns:d="http://www.w3.org/2000/09/xmldsig#" xmlns:s="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns:u="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:x="http://www.w3.org/2001/10/xml-exc-c14n#"><u:Timestamp u:Id="w_25"><u:Created>2021-03-10T12:46:42.153Z</u:Created><u:Expires>2021-03-10T12:56:42.153Z</u:Expires></u:Timestamp><wsse:BinarySecurityToken wsu:Id="SecurityToken-14f1db6e-dd4b-4690-b7d7-43cc6871d8a4" EncodingType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-soap-message-security-1.0#Base64Binary" ValueType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">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</wsse:BinarySecurityToken><Signature xmlns="http://www.w3.org/2000/09/xmldsig#">
+<SignedInfo>
+  <CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+  <SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/>
+  <Reference URI="#w_25">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>/+rbtlzUAyom+2YYxvd9WDlcESk=</DigestValue>
+  </Reference>
+  <Reference URI="#w_21">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>FEEPN6eRa848m8Gs6rZ1+nlg5rA=</DigestValue>
+  </Reference>
+  <Reference URI="#w_22">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>7rrO3Rztm3siH1Kh1WnJgr4efaI=</DigestValue>
+  </Reference>
+  <Reference URI="#w_23">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>EyJO8npTjsKyqi+x37d8eBWQAHc=</DigestValue>
+  </Reference>
+  <Reference URI="#w_24">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>S+01e1VJSC1GaxtfiOD+CqV733E=</DigestValue>
+  </Reference>
+  <Reference URI="#w_20">
+    <Transforms>
+      <Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+    </Transforms>
+    <DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+    <DigestValue>mvPbR8Tnsj/QffeR0EFGEcTHERA=</DigestValue>
+  </Reference>
+</SignedInfo>
+    <SignatureValue>dTZji79QCs3NxgvdkTBvXaSaJ5D/gFJiUjItwWC61AQ4jh/DJWYJ++i5FhLVEi+7PSkSroHJDDtzJgWBffGJLbLq8AEVD8lCFhRvSkt0ifE9CeZ+vL9wxW9/llxGcnjj4aYRxucz0aWAFxspa7/TuL/iKEtmiBs3WHSyYUUocJ3TkRhVUN82jUL5ZYYwZUqc+MPInbDOdh6q8pWZ3EuqYV7y3cOmXI8Ce9SL1kMb89TzjgpQ6CboVz2W5CGcf1xf/lHjrBtXU+7uUO0eV0bCwM3i4cSI3/9l3BZ23686U97QB/iufoN1P2nb4dV42/de/75Lh/frBG4DQ5PXQ398RA==</SignatureValue><KeyInfo><wsse:SecurityTokenReference xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" xmlns=""><wsse:Reference URI="#SecurityToken-14f1db6e-dd4b-4690-b7d7-43cc6871d8a4" ValueType="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-x509-token-profile-1.0#X509v3"/></wsse:SecurityTokenReference></KeyInfo></Signature></s:Security><wsa:To wsu:Id="w_21" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">http://www.w3.org/2005/08/addressing/anonymous</wsa:To><wsa:MessageID wsu:Id="w_22" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">uuid:3fc1f93c-cca3-46e5-873b-5c60d0e1cd4a</wsa:MessageID><wsa:Action wsu:Id="w_23" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">http://logius.nl/digipoort/wus/2.0/statusinformatieservice/1.2/StatusinformatieService/getNieuweStatussenProcesResponse</wsa:Action><wsa:RelatesTo wsu:Id="w_24" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">urn:uuid:c8d6a98f-417a-4fea-b96b-2c470bf75d5b</wsa:RelatesTo></soapenv:Header><soapenv:Body wsu:Id="w_20" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"><getNieuweStatussenProcesResponse xmlns="http://logius.nl/digipoort/koppelvlakservices/1.2/"><getNieuweStatussenProcesReturn><StatusResultaat><kenmerk>f0873951-7a7c-4200-a321-37625d1ebb2b</kenmerk><identiteitBelanghebbende><nummer>001000044B37</nummer><type>Fi</type></identiteitBelanghebbende><statuscode>105</statuscode><tijdstempelStatus>2021-03-10T12:46:41.998Z</tijdstempelStatus><statusomschrijving>Aanleverproces gestart.</statusomschrijving></StatusResultaat><StatusResultaat><kenmerk>f0873951-7a7c-4200-a321-37625d1ebb2b</kenmerk><identiteitBelanghebbende><nummer>001000044B37</nummer><type>Fi</type></identiteitBelanghebbende><statuscode>100</statuscode><tijdstempelStatus>2021-03-10T12:46:42.008Z</tijdstempelStatus><statusomschrijving>Aanleveren gelukt.</statusomschrijving></StatusResultaat><StatusResultaat><kenmerk>f0873951-7a7c-4200-a321-37625d1ebb2b</kenmerk><identiteitBelanghebbende><nummer>001000044B37</nummer><type>Fi</type></identiteitBelanghebbende><statuscode>110</statuscode><tijdstempelStatus>2021-03-10T12:46:42.018Z</tijdstempelStatus><statusomschrijving>Aanleverproces wordt aangeboden.</statusomschrijving></StatusResultaat><StatusResultaat><kenmerk>f0873951-7a7c-4200-a321-37625d1ebb2b</kenmerk><identiteitBelanghebbende><nummer>001000044B37</nummer><type>Fi</type></identiteitBelanghebbende><statuscode>200</statuscode><tijdstempelStatus>2021-03-10T12:46:42.028Z</tijdstempelStatus><statusomschrijving>Authenticatie gelukt.</statusomschrijving></StatusResultaat><StatusResultaat><kenmerk>f0873951-7a7c-4200-a321-37625d1ebb2b</kenmerk><identiteitBelanghebbende><nummer>001000044B37</nummer><type>Fi</type></identiteitBelanghebbende><statuscode>301</statuscode><tijdstempelStatus>2021-03-10T12:46:42.038Z</tijdstempelStatus><statusomschrijving>Validatie gelukt.</statusomschrijving></StatusResultaat><StatusResultaat><kenmerk>f0873951-7a7c-4200-a321-37625d1ebb2b</kenmerk><identiteitBelanghebbende><nummer>001000044B37</nummer><type>Fi</type></identiteitBelanghebbende><statuscode>301</statuscode><tijdstempelStatus>2021-03-10T12:46:42.048Z</tijdstempelStatus><statusomschrijving>Validatie gelukt.</statusomschrijving></StatusResultaat><StatusResultaat><kenmerk>f0873951-7a7c-4200-a321-37625d1ebb2b</kenmerk><identiteitBelanghebbende><nummer>001000044B37</nummer><type>Fi</type></identiteitBelanghebbende><statuscode>405</statuscode><tijdstempelStatus>2021-03-10T12:46:42.058Z</tijdstempelStatus><statusomschrijving>Afleveren naar uitvragende partij bezig...</statusomschrijving></StatusResultaat><StatusResultaat><kenmerk>f0873951-7a7c-4200-a321-37625d1ebb2b</kenmerk><identiteitBelanghebbende><nummer>001000044B37</nummer><type>Fi</type></identiteitBelanghebbende><statuscode>400</statuscode><tijdstempelStatus>2021-03-10T12:46:42.068Z</tijdstempelStatus><statusomschrijving>Afleveren uitvragende partij gelukt.</statusomschrijving></StatusResultaat><StatusResultaat><kenmerk>f0873951-7a7c-4200-a321-37625d1ebb2b</kenmerk><identiteitBelanghebbende><nummer>001000044B37</nummer><type>Fi</type></identiteitBelanghebbende><statuscode>500</statuscode><tijdstempelStatus>2021-03-10T12:46:42.078Z</tijdstempelStatus><statusomschrijving>Validatie bij de uitvragende partij gelukt.</statusomschrijving><statusdetails>&lt;Responsemessage version="2006.1">
+&lt;Identification>
+&lt;MessageId>BERICHTKENMERK-VAN-AANLEVERING&lt;/MessageId>
+&lt;RefersToMessageId>PROCESKENMERK-VAN-AANLEVERING&lt;/RefersToMessageId>
+&lt;MessageIdBd>BERICHTID-VANUIT-BD&lt;/MessageIdBd>
+&lt;DatumTijdOntvangst>2009-08-19T19:44:13+02:00&lt;/DatumTijdOntvangst>
+&lt;ResponseType>acknowledgement&lt;/ResponseType>
+&lt;/Identification>
+&lt;Specification>
+&lt;Class>A&lt;/Class>
+&lt;Code>0001&lt;/Code>
+&lt;Description>Status: Verwerkbaar&lt;/Description>
+&lt;/Specification>
+&lt;/Responsemessage></statusdetails></StatusResultaat></getNieuweStatussenProcesReturn></getNieuweStatussenProcesResponse></soapenv:Body></soapenv:Envelope>

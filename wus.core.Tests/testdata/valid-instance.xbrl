@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--XBRL instance based on taxonomy report namespace http://www.nltaxonomie.nl/nt14/bd/20191211/entrypoints/bd-rpt-ob-aangifte-2020.xsd -->
+<!--Intellectual Property State of the Netherlands -->
+<!--Created on: 01-10-2019 14:00:00 -->
+<xbrli:xbrl xml:lang="nl" xmlns:bd-i="http://www.nltaxonomie.nl/nt14/bd/20191211/dictionary/bd-data" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:iso4217="http://www.xbrl.org/2003/iso4217" xmlns:xbrli="http://www.xbrl.org/2003/instance">
+  <link:schemaRef xlink:type="simple" xlink:href="http://www.nltaxonomie.nl/nt14/bd/20191211/entrypoints/bd-rpt-ob-aangifte-2020.xsd"/>
+  <xbrli:context id="Msg">
+    <xbrli:entity>
+      <xbrli:identifier scheme="www.belastingdienst.nl/omzetbelastingnummer">001000044B37</xbrli:identifier>
+    </xbrli:entity>
+    <xbrli:period>
+      <xbrli:startDate>2020-10-01</xbrli:startDate>
+      <xbrli:endDate>2020-10-31</xbrli:endDate>
+    </xbrli:period>
+  </xbrli:context>
+  <xbrli:unit id="EUR">
+    <xbrli:measure>iso4217:EUR</xbrli:measure>
+  </xbrli:unit>
+  <bd-i:ContactType contextRef="Msg">INT</bd-i:ContactType>
+  <bd-i:ContactInitials contextRef="Msg">Initials</bd-i:ContactInitials>
+  <bd-i:ContactPrefix contextRef="Msg">Prefix</bd-i:ContactPrefix>
+  <bd-i:ContactSurname contextRef="Msg">Surname</bd-i:ContactSurname>
+  <bd-i:ContactTelephoneNumber contextRef="Msg">0612345678</bd-i:ContactTelephoneNumber>
+  <bd-i:TaxConsultantNumber contextRef="Msg">234564</bd-i:TaxConsultantNumber>
+  <bd-i:DateTimeCreation contextRef="Msg">202011151254</bd-i:DateTimeCreation>
+  <bd-i:MessageReferenceSupplierVAT contextRef="Msg">OB-KTG00-AG</bd-i:MessageReferenceSupplierVAT>
+  <bd-i:SoftwarePackageVersion contextRef="Msg">ApplicatieVersie</bd-i:SoftwarePackageVersion>
+  <bd-i:SoftwarePackageName contextRef="Msg">ApplicatieNaam</bd-i:SoftwarePackageName>
+  <bd-i:SoftwareVendorAccountNumber contextRef="Msg">SWO12345</bd-i:SoftwareVendorAccountNumber>
+  <bd-i:InstallationDistanceSalesWithinTheEC decimals="INF" contextRef="Msg" unitRef="EUR">100</bd-i:InstallationDistanceSalesWithinTheEC>
+  <bd-i:SmallEntrepreneurProvisionReduction decimals="INF" contextRef="Msg" unitRef="EUR">0</bd-i:SmallEntrepreneurProvisionReduction>
+  <bd-i:SuppliesServicesNotTaxed decimals="INF" contextRef="Msg" unitRef="EUR">0</bd-i:SuppliesServicesNotTaxed>
+  <bd-i:SuppliesToCountriesOutsideTheEC decimals="INF" contextRef="Msg" unitRef="EUR">4000</bd-i:SuppliesToCountriesOutsideTheEC>
+  <bd-i:SuppliesToCountriesWithinTheEC decimals="INF" contextRef="Msg" unitRef="EUR">100</bd-i:SuppliesToCountriesWithinTheEC>
+  <bd-i:TaxedTurnoverPrivateUse decimals="INF" contextRef="Msg" unitRef="EUR">0</bd-i:TaxedTurnoverPrivateUse>
+  <bd-i:TaxedTurnoverSuppliesServicesGeneralTariff decimals="INF" contextRef="Msg" unitRef="EUR">15000</bd-i:TaxedTurnoverSuppliesServicesGeneralTariff>
+  <bd-i:TaxedTurnoverSuppliesServicesOtherRates decimals="INF" contextRef="Msg" unitRef="EUR">0</bd-i:TaxedTurnoverSuppliesServicesOtherRates>
+  <bd-i:TaxedTurnoverSuppliesServicesReducedTariff decimals="INF" contextRef="Msg" unitRef="EUR">1500</bd-i:TaxedTurnoverSuppliesServicesReducedTariff>
+  <bd-i:TurnoverFromTaxedSuppliesFromCountriesOutsideTheEC decimals="INF" contextRef="Msg" unitRef="EUR">1200</bd-i:TurnoverFromTaxedSuppliesFromCountriesOutsideTheEC>
+  <bd-i:TurnoverFromTaxedSuppliesFromCountriesWithinTheEC decimals="INF" contextRef="Msg" unitRef="EUR">0</bd-i:TurnoverFromTaxedSuppliesFromCountriesWithinTheEC>
+  <bd-i:TurnoverSuppliesServicesByWhichVATTaxationIsTransferred decimals="INF" contextRef="Msg" unitRef="EUR">0</bd-i:TurnoverSuppliesServicesByWhichVATTaxationIsTransferred>
+  <bd-i:ValueAddedTaxOnInput decimals="INF" contextRef="Msg" unitRef="EUR">0</bd-i:ValueAddedTaxOnInput>
+  <bd-i:ValueAddedTaxOnSuppliesFromCountriesOutsideTheEC decimals="INF" contextRef="Msg" unitRef="EUR">0</bd-i:ValueAddedTaxOnSuppliesFromCountriesOutsideTheEC>
+  <bd-i:ValueAddedTaxOnSuppliesFromCountriesWithinTheEC decimals="INF" contextRef="Msg" unitRef="EUR">0</bd-i:ValueAddedTaxOnSuppliesFromCountriesWithinTheEC>
+  <bd-i:ValueAddedTaxOwed decimals="INF" contextRef="Msg" unitRef="EUR">3240</bd-i:ValueAddedTaxOwed>
+  <bd-i:ValueAddedTaxOwedToBePaidBack decimals="INF" contextRef="Msg" unitRef="EUR">3240</bd-i:ValueAddedTaxOwedToBePaidBack>
+  <bd-i:ValueAddedTaxPrivateUse decimals="INF" contextRef="Msg" unitRef="EUR">0</bd-i:ValueAddedTaxPrivateUse>
+  <bd-i:ValueAddedTaxSuppliesServicesByWhichVATTaxationIsTransferred decimals="INF" contextRef="Msg" unitRef="EUR">0</bd-i:ValueAddedTaxSuppliesServicesByWhichVATTaxationIsTransferred>
+  <bd-i:ValueAddedTaxSuppliesServicesGeneralTariff decimals="INF" contextRef="Msg" unitRef="EUR">3150</bd-i:ValueAddedTaxSuppliesServicesGeneralTariff>
+  <bd-i:ValueAddedTaxSuppliesServicesOtherRates decimals="INF" contextRef="Msg" unitRef="EUR">0</bd-i:ValueAddedTaxSuppliesServicesOtherRates>
+  <bd-i:ValueAddedTaxSuppliesServicesReducedTariff decimals="INF" contextRef="Msg" unitRef="EUR">90</bd-i:ValueAddedTaxSuppliesServicesReducedTariff>
+</xbrli:xbrl>
