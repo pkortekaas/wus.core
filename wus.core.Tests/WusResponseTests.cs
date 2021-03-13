@@ -17,24 +17,24 @@ namespace wus.core.Tests
         [Fact]
         void HandleResponse_ValidDelilverResponse_Pass()
         {
-            // Arrange
+            // Given
             ILogger logger = null;
             IWusXmlDSig xmlDSig = new WusXmlDSig(logger);
             WusResponse wusResponse = new WusResponse(xmlDSig, logger);
 
             string responseFile = Path.Combine(TestDataPath, "valid-deliver-response.xml");
 
-            // Act
+            // When
             aanleverResponse actual = wusResponse.HandleResponse<aanleverResponse>(File.ReadAllText(responseFile));
 
-            // Assert
+            // Then
             Assert.True(actual != null);
         }
 
         [Fact]
         void HandleResponse_FaultDeliverResponse_Fail()
         {
-            // Arrange
+            // Given
             ILogger logger = null;
             IWusXmlDSig xmlDSig = new WusXmlDSig(logger);
             WusResponse wusResponse = new WusResponse(xmlDSig, logger);
@@ -42,9 +42,9 @@ namespace wus.core.Tests
 
             string responseFile = Path.Combine(TestDataPath, "fault-deliver-response.xml");
 
-            // Act
+            // When
 
-            // Assert
+            // Then
             WusException actual = Assert.Throws<WusException>( () =>
                                 wusResponse.HandleResponse<aanleverResponse>(File.ReadAllText(responseFile)));
 
@@ -54,16 +54,16 @@ namespace wus.core.Tests
         [Fact]
         void HandleResponse_InvalidSignature_Fail()
         {
-            // Arrange
+            // Given
             ILogger logger = null;
             IWusXmlDSig xmlDSig = new WusXmlDSig(logger);
             WusResponse wusResponse = new WusResponse(xmlDSig, logger);
 
             string responseFile = Path.Combine(TestDataPath, "tampered-deliver-response.xml");
 
-            // Act
+            // When
 
-            // Assert
+            // Then
             Assert.Throws<VerificationException>( () =>
                             wusResponse.HandleResponse<aanleverResponse>(File.ReadAllText(responseFile)));
         }
@@ -71,42 +71,42 @@ namespace wus.core.Tests
         [Fact]
         void HandleResponse_ValidNewStatusResponse_Pass()
         {
-            // Arrange
+            // Given
             ILogger logger = null;
             IWusXmlDSig xmlDSig = new WusXmlDSig(logger);
             WusResponse wusResponse = new WusResponse(xmlDSig, logger);
 
             string responseFile = Path.Combine(TestDataPath, "valid-newstatus-response.xml");
 
-            // Act
+            // When
             getNieuweStatussenProcesResponse actual = wusResponse.HandleResponse<getNieuweStatussenProcesResponse>(File.ReadAllText(responseFile));
 
-            // Assert
+            // Then
             Assert.True(actual != null);
         }
 
         [Fact]
         void HandleResponse_ValidNewStatusReturn_Pass()
         {
-            // Arrange
+            // Given
             ILogger logger = null;
             IWusXmlDSig xmlDSig = new WusXmlDSig(logger);
             WusResponse wusResponse = new WusResponse(xmlDSig, logger);
 
             string responseFile = Path.Combine(TestDataPath, "valid-newstatus-response.xml");
 
-            // Act
+            // When
            IEnumerable<StatusResultaat> actual = wusResponse.HandleResponse<getNieuweStatussenProcesResponse>(File.ReadAllText(responseFile))
                                                     .getNieuweStatussenProcesReturn;
 
-            // Assert
+            // Then
             Assert.True(actual != null);
         }
 
         [Fact]
         void HandleResponse_FaultNewStatusResponse_Fail()
         {
-            // Arrange
+            // Given
             ILogger logger = null;
             IWusXmlDSig xmlDSig = new WusXmlDSig(logger);
             WusResponse wusResponse = new WusResponse(xmlDSig, logger);
@@ -114,9 +114,9 @@ namespace wus.core.Tests
 
             string responseFile = Path.Combine(TestDataPath, "fault-newstatus-response.xml");
 
-            // Act
+            // When
 
-            // Assert
+            // Then
             WusException actual = Assert.Throws<WusException>( () =>
                                 wusResponse.HandleResponse<getNieuweStatussenProcesResponse>(File.ReadAllText(responseFile)));
 

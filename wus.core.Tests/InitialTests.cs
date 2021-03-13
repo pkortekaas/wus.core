@@ -15,11 +15,11 @@ namespace wus.core.Tests
         [Fact]
         public void X509Certificate_FindCertificate_Pass()
         {
-            // Assert
-            using (X509Certificate2 certificate = GetCertificate(_certificateThumbPrint))
+            // Then
+            WithX509Certificate( cert =>
             {
-                Assert.True(certificate != null, "X509Certificate cannot be found");
-            }
+                Assert.True(cert != null, "X509Certificate cannot be found");
+            });
         }
 
         [Theory]
@@ -31,10 +31,10 @@ namespace wus.core.Tests
         [InlineData("valid-instance.xbrl")]
         public void TestDataFiles_CheckExistence_Pass(string fileName)
         {
-            // Arrange
+            // Given
             string filePath = Path.Combine(TestDataPath, fileName);
 
-            // Assert
+            // Then
             Assert.True(File.Exists(filePath), $"Verify {fileName} exists");
         }
 

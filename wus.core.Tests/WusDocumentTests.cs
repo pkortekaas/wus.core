@@ -1,5 +1,4 @@
 using System;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Xml;
 using CoreWUS;
@@ -19,25 +18,25 @@ namespace wus.core.Tests
         [Fact]
         public void CreateDocumentBytes_Create_Pass()
         {
-            // Arrange
+            // Given
             ILogger logger = null;
             IWusXmlDSig xmlDSig = new WusXmlDSig(logger);
 
-            // Act
+            // When
             byte[] docBytes = GetCreatedDocumentBytes(xmlDSig);
 
-            // Assert
+            // Then
             Assert.True(docBytes != null, "Cannot create document");
         }
 
         [Fact]
         public void CreateDocumentBytes_CreateAndVerifySignature_Pass()
         {
-            // Arrange
+            // Given
             ILogger logger = null;
             IWusXmlDSig xmlDSig = new WusXmlDSig(logger);
 
-            // Act
+            // When
             byte[] docBytes = GetCreatedDocumentBytes(xmlDSig);
 
             bool actual = false;
@@ -47,13 +46,12 @@ namespace wus.core.Tests
                 actual = xmlDSig.VerifySignature(xmlData);
             }
 
-            // Assert
+            // Then
             Assert.True(actual, "Signature of created document cannot be verified");
         }
 
         private byte[] GetCreatedDocumentBytes(IWusXmlDSig xmlDSig)
         {
-            // Arrange
             ILogger logger = null;
             IWusDocument wusDocument = new WusDocument(xmlDSig, logger);
 
@@ -64,36 +62,22 @@ namespace wus.core.Tests
                 OmitXmlDeclaration = true
             };
 
-            aanleverRequest request = new aanleverRequest()
-            {
-                berichtsoort = "Omzetbelasting",
-                aanleverkenmerk = System.Guid.NewGuid().ToString("D"),
-                autorisatieAdres = "http://geenausp.nl",
-                identiteitBelanghebbende = new identiteitType() {
-                    nummer = "001000044B37",
-                    type = "Fi"
-                },
-                rolBelanghebbende = "Bedrijf",
-                berichtInhoud = new berichtInhoudType() {
-                    mimeType = "text/xml",
-                    bestandsnaam = "Omzetbelasting.xbrl",
-                    inhoud = Encoding.UTF8.GetBytes("UnitTest")
-                }
-            };
+            aanleverRequest request = AanleverRequest;
 
-            byte[] docBytes;
-            using (X509Certificate2 certificate = GetCertificate(_certificateThumbPrint))
+            byte[] docBytes = null;
+            WithX509Certificate( cert =>
             {
                 WusDocumentInfo wusDocumentInfo = new WusDocumentInfo()
                 {
                     Envelope = request.ToXElement(xmlWriterSettings),
                     SoapAction = "http://logius.nl/digipoort/wus/2.0/aanleverservice/1.2/AanleverService/aanleverenRequest",
                     Uri = new Uri("https://cs-bedrijven.procesinfrastructuur.nl/cpl/aanleverservice/1.2"),
-                    Certificate = certificate
+                    Certificate = cert
                 };
 
                 docBytes = wusDocument.CreateDocumentBytes(wusDocumentInfo);
-            }
+            });
+
             return docBytes;
         }
     }

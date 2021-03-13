@@ -60,7 +60,7 @@ namespace WusClient
                 baseUrl = "https://preprod-dgp2.procesinfrastructuur.nl";
                 deliveryUrl = "https://preprod-dgp2.procesinfrastructuur.nl/wus/2.0/aanleverservice/1.2";
                 statusUrl=  "https://preprod-dgp2.procesinfrastructuur.nl/wus/2.0/statusinformatieservice/1.2";
-                serverCertificateThumbprint = "519B3FBE5C949B25FF908876905A0163A39DB555";
+                serverCertificateThumbprint = "0BF50DF180BA027DD3E969A8677C2EA3EA2A8981";
             }
 
             // quirk to adjust instance name when

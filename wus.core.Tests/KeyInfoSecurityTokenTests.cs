@@ -13,14 +13,14 @@ namespace wus.core.Tests
         [Fact]
         public void KeyInfoSecurityToken_SetTokenAndPrefixAndVerify_Pass()
         {
-            // Arrange
+            // Given
             string expectedTokenId = "TokenId";
             string expectedPrefix = "Prefix";
 
-            // Act
+            // When
             KeyInfoSecurityToken keyInfoSecurityToken = new KeyInfoSecurityToken(expectedTokenId, expectedPrefix);
 
-            // Assert
+            // Then
             Assert.Equal(expectedTokenId, keyInfoSecurityToken.TokenId);
             Assert.Equal(expectedPrefix, keyInfoSecurityToken.Prefix);
         }

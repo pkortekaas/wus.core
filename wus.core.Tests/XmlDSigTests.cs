@@ -1,17 +1,7 @@
-using System;
 using Xunit;
-using Moq;
 using CoreWUS;
-using System.Runtime.CompilerServices;
 using System.IO;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
-
-// https://www.patrickschadler.com/c-unit-tests-mocks/
-// https://www.patrickschadler.com/c-unit-tests-mocks/
-// https://xunit.net/docs/getting-started/netcore/cmdline
 
 namespace wus.core.Tests
 {
@@ -25,34 +15,34 @@ namespace wus.core.Tests
         [Fact]
         public void VerifySignature_ValidData_Pass()
         {
-            // Arrange
+            // Given
             ILogger logger = null;
             IWusXmlDSig xmlDSig = new WusXmlDSig(logger);
 
             string responseFile = Path.Combine(TestDataPath, "valid-deliver-response.xml");
             string data = Encoding.UTF8.GetString(File.ReadAllBytes(responseFile));
 
-            // Act
+            // When
             bool actual = xmlDSig.VerifySignature(data);
 
-            // Assert
+            // Then
             Assert.True(actual, "Verify valid XmlDSig signature");
         }
 
         [Fact]
         public void VerifySignature_TamperedData_Fail()
         {
-            // Arrange
+            // Given
             ILogger logger = null;
             IWusXmlDSig xmlDSig = new WusXmlDSig(logger);
 
             string responseFile = Path.Combine(TestDataPath, "tampered-deliver-response.xml");
             string data = Encoding.UTF8.GetString(File.ReadAllBytes(responseFile));
 
-            // Act
+            // When
             bool actual = xmlDSig.VerifySignature(data);
 
-            // Assert
+            // Then
             Assert.False(actual, "Verify tampered XmlDSig signature");
         }
     }
