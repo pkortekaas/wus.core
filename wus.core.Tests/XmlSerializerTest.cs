@@ -34,7 +34,7 @@ namespace wus.core.Tests
 
             // When
             XElement element = request.ToXElement(xmlWriterSettings);
-            int nsCount = element.Attributes().Where(e => e.Name == "xmlns").Count();
+            int nsCount = element.Attributes().Count();
             string actual = element.Attribute("xmlns").Value;
 
             // Then

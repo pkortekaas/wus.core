@@ -7,7 +7,7 @@
     <Copyright>© 2020-2021 Paul Kortekaas</Copyright>
     <PackageId>wus.core</PackageId>
     <AssemblyTitle>WUS 2.0 support library</AssemblyTitle>
-    <Version>0.9.0-dev-20200307</Version>
+    <Version>0.9.0-dev-20200314</Version>
     <AssemblyVersion>0.9.0</AssemblyVersion>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
     <CodeAnalysisRuleSet>../wus.core.ruleset</CodeAnalysisRuleSet>

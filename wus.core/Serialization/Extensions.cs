@@ -6,7 +6,6 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
-using CoreWUS.Serialization;
 
 namespace CoreWUS.Extensions
 {
@@ -26,11 +25,15 @@ namespace CoreWUS.Extensions
                 {
                     using (XmlWriter writer = XmlWriter.Create(sw, settings))
                     {
-                        XmlPrefixRootAttribute xmlRootAttribute = typeof(T).GetCustomAttribute<XmlPrefixRootAttribute>(false);
-                        string prefix = xmlRootAttribute?.Prefix ?? "";
-                        string ns = xmlRootAttribute?.Namespace ?? "";
-                        XmlSerializerNamespaces xns = new XmlSerializerNamespaces();
-                        xns.Add(prefix, ns);
+                        XmlSerializerNamespaces xns = null;
+                        // Suppress xsi and xsd namespaces and provide only default namespace
+                        XmlRootAttribute xmlRootAttribute = typeof(T).GetCustomAttribute<XmlRootAttribute>(false);
+                        if (xmlRootAttribute != null)
+                        {
+                            string ns = xmlRootAttribute.Namespace ?? string.Empty;
+                            xns = new XmlSerializerNamespaces();
+                            xns.Add(string.Empty, ns);
+                        }
                         xmlserializer.Serialize(writer, value, xns);
                     }
                     return sw.ToString();
