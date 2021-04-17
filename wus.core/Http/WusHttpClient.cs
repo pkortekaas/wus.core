@@ -11,13 +11,17 @@ namespace CoreWUS.Http
     public sealed class WusHttpClient : IWusHttpClient
     {
         private readonly HttpClient _client;
+        private readonly X509Certificate2 _clientCertificate;
         private ILogger _logger;
 
         public WusHttpClient(Uri baseUri, X509Certificate2 clientCertificate, string serverThumbprint, ILogger logger)
         {
             _logger = logger;
+            _clientCertificate = clientCertificate;
             _client = HttpClientFactory.Create(baseUri, clientCertificate, serverThumbprint, logger);
         }
+
+        public X509Certificate2 ClientCertificate => _clientCertificate;
 
         public string Post(Uri url, string soapAction, byte[] data)
         {

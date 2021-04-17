@@ -37,7 +37,7 @@ namespace WusClient
         {
             string[] scenarios = new string[] { "Happyflow", "AanleverFault", "StatusInformatieFault",
                                                 "Afleverfout", "Foutuitvragendepartij",
-						                        "TechnischProbleemAfleveren", "MaximaalAantalAfleverpogingen",
+                                                "TechnischProbleemAfleveren", "MaximaalAantalAfleverpogingen",
                                                 "ZwaarbelastAanleveren", "OverbelastAanleveren",
                                                 "ZwaarbelastStatusInformatie", "OverbelastStatusInformatie"};
             // Change for your own certificate, or use filename/password
@@ -45,7 +45,7 @@ namespace WusClient
             string path = Path.GetFileName(Directory.GetCurrentDirectory());
 
             string reference = null;
-            string instanceFile = "./xbrl/VB-01_bd-rpt-ob-aangifte-2020.xbrl";
+            string instanceFile = "./xbrl/VB-01_bd-rpt-ob-aangifte-2021.xbrl";
             string noAusp = "http://geenausp.nl";
             string scenario = scenarios[0];
             bool preprod = false;
@@ -59,7 +59,7 @@ namespace WusClient
             {
                 baseUrl = "https://preprod-dgp2.procesinfrastructuur.nl";
                 deliveryUrl = "https://preprod-dgp2.procesinfrastructuur.nl/wus/2.0/aanleverservice/1.2";
-                statusUrl=  "https://preprod-dgp2.procesinfrastructuur.nl/wus/2.0/statusinformatieservice/1.2";
+                statusUrl = "https://preprod-dgp2.procesinfrastructuur.nl/wus/2.0/statusinformatieservice/1.2";
                 serverCertificateThumbprint = "0BF50DF180BA027DD3E969A8677C2EA3EA2A8981";
             }
 
@@ -87,12 +87,14 @@ namespace WusClient
                 berichtsoort = "Omzetbelasting",
                 aanleverkenmerk = preprod ? Guid.NewGuid().ToString("D") : scenario,
                 autorisatieAdres = noAusp,
-                identiteitBelanghebbende = new identiteitType() {
+                identiteitBelanghebbende = new identiteitType()
+                {
                     nummer = "001000044B37",
                     type = "Fi"
                 },
                 rolBelanghebbende = "Bedrijf",
-                berichtInhoud = new berichtInhoudType() {
+                berichtInhoud = new berichtInhoudType()
+                {
                     mimeType = "text/xml",
                     bestandsnaam = "Omzetbelasting.xbrl",
                     inhoud = File.ReadAllBytes(instanceFile)
@@ -108,7 +110,7 @@ namespace WusClient
                 {
                     logger.Log(LogLevel.Info, "Startup");
                     IWusHttpClient wusHttpClient = new WusHttpClient(new Uri(baseUrl), cert, serverCertificateThumbprint, logger);
-                    WusProcessor wp = new WusProcessor(wusHttpClient, logger, cert);
+                    WusProcessor wp = new WusProcessor(wusHttpClient, logger);
                     wp.BeforeSend += (object sender, string data) =>
                     {
                         logger.Log(LogLevel.Verbose, $"Request:{Environment.NewLine}{data}");

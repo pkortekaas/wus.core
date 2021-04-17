@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using CoreWUS;
 using Moq;
 using Xunit;
@@ -26,14 +27,15 @@ namespace wus.core.Tests
 
             // Mock a valid response
             string responseFile = Path.Combine(TestDataPath, "valid-deliver-response.xml");
-            Mock<IWusHttpClient> httpClient = CreateMockHttpClient(File.ReadAllText(responseFile));
+
             aanleverRequest request = AanleverRequest;
 
             // When
             aanleverResponse actual = null;
             WithX509Certificate( cert =>
             {
-                WusProcessor wp = new WusProcessor(httpClient.Object, logger, cert);
+                Mock<IWusHttpClient> httpClient = CreateMockHttpClient(File.ReadAllText(responseFile), cert);
+                WusProcessor wp = new WusProcessor(httpClient.Object, logger);
                 actual = wp.Deliver(request, new Uri(_deliveryUrl));
             });
 
@@ -51,14 +53,14 @@ namespace wus.core.Tests
 
             // Mock a valid response
             string responseFile = Path.Combine(TestDataPath, "fault-deliver-response.xml");
-            Mock<IWusHttpClient> httpClient = CreateMockHttpClient(File.ReadAllText(responseFile));
             aanleverRequest request = AanleverRequest;
 
             // When
             WusException actual = null;
             WithX509Certificate( cert =>
             {
-                WusProcessor wp = new WusProcessor(httpClient.Object, logger, cert);
+                Mock<IWusHttpClient> httpClient = CreateMockHttpClient(File.ReadAllText(responseFile), cert);
+                WusProcessor wp = new WusProcessor(httpClient.Object, logger);
                 actual = Assert.Throws<WusException>( () => wp.Deliver(request, new Uri(_deliveryUrl)));
             });
 
@@ -76,14 +78,14 @@ namespace wus.core.Tests
 
             // Mock a valid response
             string responseFile = Path.Combine(TestDataPath, "valid-deliver-response.xml");
-            Mock<IWusHttpClient> httpClient = CreateMockHttpClient(File.ReadAllText(responseFile));
             aanleverRequest request = AanleverRequest;
 
             // When
             ArgumentNullException actual = null;
             WithX509Certificate( cert =>
             {
-                WusProcessor wp = new WusProcessor(httpClient.Object, logger, cert);
+                Mock<IWusHttpClient> httpClient = CreateMockHttpClient(File.ReadAllText(responseFile), cert);
+                WusProcessor wp = new WusProcessor(httpClient.Object, logger);
                 actual = Assert.Throws<ArgumentNullException>( () => wp.Deliver(request, null));
             });
 
@@ -100,14 +102,14 @@ namespace wus.core.Tests
 
             // Mock a valid response
             string responseFile = Path.Combine(TestDataPath, "valid-newstatus-response.xml");
-            Mock<IWusHttpClient> httpClient = CreateMockHttpClient(File.ReadAllText(responseFile));
             getNieuweStatussenProcesRequest request = NieuweStatussenProcesRequest;
 
             // When
             IEnumerable<StatusResultaat> actual = null;
             WithX509Certificate( cert =>
             {
-                WusProcessor wp = new WusProcessor(httpClient.Object, logger, cert);
+                Mock<IWusHttpClient> httpClient = CreateMockHttpClient(File.ReadAllText(responseFile), cert);
+                WusProcessor wp = new WusProcessor(httpClient.Object, logger);
                 actual = wp.NewStatusProcess(request, new Uri(_statusUrl));
             });
 
@@ -125,14 +127,14 @@ namespace wus.core.Tests
 
             // Mock a valid response
             string responseFile = Path.Combine(TestDataPath, "fault-newstatus-response.xml");
-            Mock<IWusHttpClient> httpClient = CreateMockHttpClient(File.ReadAllText(responseFile));
             getNieuweStatussenProcesRequest request = NieuweStatussenProcesRequest;
 
             // When
             WusException actual = null;
             WithX509Certificate( cert =>
             {
-                WusProcessor wp = new WusProcessor(httpClient.Object, logger, cert);
+                Mock<IWusHttpClient> httpClient = CreateMockHttpClient(File.ReadAllText(responseFile), cert);
+                WusProcessor wp = new WusProcessor(httpClient.Object, logger);
                 actual = Assert.Throws<WusException>( () => wp.NewStatusProcess(request, new Uri(_statusUrl)));
             });
 
@@ -150,14 +152,14 @@ namespace wus.core.Tests
 
             // Mock a valid response
             string responseFile = Path.Combine(TestDataPath, "valid-newstatus-response.xml");
-            Mock<IWusHttpClient> httpClient = CreateMockHttpClient(File.ReadAllText(responseFile));
             getNieuweStatussenProcesRequest request = NieuweStatussenProcesRequest;
 
             // When
             ArgumentNullException actual = null;
             WithX509Certificate( cert =>
             {
-                WusProcessor wp = new WusProcessor(httpClient.Object, logger, cert);
+                Mock<IWusHttpClient> httpClient = CreateMockHttpClient(File.ReadAllText(responseFile), cert);
+                WusProcessor wp = new WusProcessor(httpClient.Object, logger);
                 actual = Assert.Throws<ArgumentNullException>( () => wp.NewStatusProcess(request, null));
             });
 
@@ -165,11 +167,12 @@ namespace wus.core.Tests
             Assert.Equal(expected, actual.ParamName);
         }
 
-        private Mock<IWusHttpClient> CreateMockHttpClient(string result)
+        private Mock<IWusHttpClient> CreateMockHttpClient(string result, X509Certificate2 certificate)
         {
             Mock<IWusHttpClient> httpClient = new Mock<IWusHttpClient>();
             httpClient.Setup(x => x.Post(It.IsAny<Uri>(), It.IsAny<string>(), It.IsAny<byte[]>()))
                                 .Returns(result);
+            httpClient.Setup(c => c.ClientCertificate).Returns(certificate);
             return httpClient;
         }
     }

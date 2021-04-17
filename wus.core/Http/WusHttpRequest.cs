@@ -16,11 +16,13 @@ namespace CoreWUS
         private readonly string _serverThumbprint;
         private ILogger _logger;
 
+        public X509Certificate2 ClientCertificate => _clientCertificate;
+
         public WusHttpRequest(Uri baseUri, X509Certificate2 clientCertificate, string serverThumbprint, ILogger logger)
         {
             _baseUri = baseUri;
             _clientCertificate = clientCertificate;
-            _serverThumbprint = serverThumbprint;
+            _serverThumbprint = serverThumbprint?.Replace(":", "");
             _logger = logger;
         }
 
@@ -81,7 +83,7 @@ namespace CoreWUS
             request.ServerCertificateValidationCallback = (message, cert, chain, errors) =>
             {
                 X509Certificate2 cert2 = cert as X509Certificate2;
-                bool valid = cert2.Thumbprint == _serverThumbprint;
+                bool valid = cert2.Thumbprint.Replace(":", "").Equals(_serverThumbprint, StringComparison.InvariantCultureIgnoreCase);
                 _logger?.Log(valid ? LogLevel.Debug : LogLevel.Error, $"Validate server certificate: {cert2.Thumbprint} {valid}");
                 return valid;
             };

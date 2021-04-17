@@ -18,12 +18,12 @@ namespace CoreWUS.Http
             {
                 HttpClientHandler handler = new HttpClientHandler();
                 handler.ClientCertificates.Add(clientCertificate);
-                handler.ServerCertificateCustomValidationCallback  = (message, cert, chain, errors) =>
-                {
-                    bool valid = cert.Thumbprint == serverThumbprint;
-                    logger?.Log(valid ? LogLevel.Debug : LogLevel.Error, $"Validate server certificate: {cert.Thumbprint} {valid}");
-                    return valid;
-                };
+                handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
+               {
+                   bool valid = cert.Thumbprint.Replace(":", "").Equals(serverThumbprint?.Replace(":", ""), StringComparison.InvariantCultureIgnoreCase);
+                   logger?.Log(valid ? LogLevel.Debug : LogLevel.Error, $"Validate server certificate: {cert.Thumbprint} {valid}");
+                   return valid;
+               };
                 _httpClient = new HttpClient(handler);
                 _httpClient.BaseAddress = baseUri;
                 _httpClient.MaxResponseContentBufferSize = 64 * 1024;

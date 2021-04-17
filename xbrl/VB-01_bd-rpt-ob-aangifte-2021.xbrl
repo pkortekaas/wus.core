@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--XBRL instance based on taxonomy report namespace http://www.nltaxonomie.nl/nt14/bd/20191211/entrypoints/bd-rpt-ob-aangifte-2020.xsd -->
+<!--XBRL instance based on taxonomy report namespace http://www.nltaxonomie.nl/nt15/bd/20201209/entrypoints/bd-rpt-ob-aangifte-2021.xsd -->
 <!--Intellectual Property State of the Netherlands -->
-<!--Created on: 01-10-2019 14:00:00 -->
-<xbrli:xbrl xml:lang="nl" xmlns:bd-i="http://www.nltaxonomie.nl/nt14/bd/20191211/dictionary/bd-data" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:iso4217="http://www.xbrl.org/2003/iso4217" xmlns:xbrli="http://www.xbrl.org/2003/instance">
-  <link:schemaRef xlink:type="simple" xlink:href="http://www.nltaxonomie.nl/nt14/bd/20191211/entrypoints/bd-rpt-ob-aangifte-2020.xsd"/>
+<!--Created on: 06-11-2020 14:00:00 -->
+<xbrli:xbrl xml:lang="nl" xmlns:bd-i="http://www.nltaxonomie.nl/nt15/bd/20201209/dictionary/bd-data" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:iso4217="http://www.xbrl.org/2003/iso4217" xmlns:xbrli="http://www.xbrl.org/2003/instance">
+  <link:schemaRef xlink:type="simple" xlink:href="http://www.nltaxonomie.nl/nt15/bd/20201209/entrypoints/bd-rpt-ob-aangifte-2021.xsd"/>
   <xbrli:context id="Msg">
     <xbrli:entity>
       <xbrli:identifier scheme="www.belastingdienst.nl/omzetbelastingnummer">001000044B37</xbrli:identifier>
     </xbrli:entity>
     <xbrli:period>
-      <xbrli:startDate>2020-10-01</xbrli:startDate>
-      <xbrli:endDate>2020-10-31</xbrli:endDate>
+      <xbrli:startDate>2021-10-01</xbrli:startDate>
+      <xbrli:endDate>2021-10-31</xbrli:endDate>
     </xbrli:period>
   </xbrli:context>
   <xbrli:unit id="EUR">

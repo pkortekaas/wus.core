@@ -69,7 +69,7 @@ namespace CoreWUS
             signedXml.SignedInfo.SignatureMethod = SignedXml.XmlDsigRSASHA1Url;
 
             XmlDsigExcC14NTransform transform = new XmlDsigExcC14NTransform();
-            foreach(string id in referenceIds)
+            foreach (string id in referenceIds)
             {
                 Reference reference = new Reference
                 {

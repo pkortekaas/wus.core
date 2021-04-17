@@ -24,7 +24,6 @@ SOFTWARE.
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -39,7 +38,6 @@ namespace CoreWUS
         private readonly IWusXmlDSig _xmlDSig;
         private readonly IWusResponse _wusResponse;
         private readonly IWusDocument _wusDocument;
-        private readonly X509Certificate2 _signingCertificate;
         private readonly ILogger _logger;
 
         private const string _deliverAction = "http://logius.nl/digipoort/wus/2.0/aanleverservice/1.2/AanleverService/aanleverenRequest";
@@ -51,7 +49,7 @@ namespace CoreWUS
         [SuppressMessage("Microsoft.CodeAnalysis.FxCopAnalyzers", "CA1713:EventsPrefix")]
         public event EventHandler<string> AfterResponse;
 
-        public WusProcessor(IWusHttpClient client, ILogger logger, X509Certificate2 signingCertificate)
+        public WusProcessor(IWusHttpClient client, ILogger logger)
         {
             _logger = logger;
             _logger?.Log(LogLevel.Debug, "Start");
@@ -65,7 +63,6 @@ namespace CoreWUS
             _xmlDSig = new WusXmlDSig(logger);
             _wusResponse = new WusResponse(_xmlDSig, logger);
             _wusDocument = new WusDocument(_xmlDSig, logger);
-            _signingCertificate = signingCertificate;
             _httpClient = client;
 
             _logger?.Log(LogLevel.Debug, "End");
@@ -106,7 +103,7 @@ namespace CoreWUS
                 Envelope = body,
                 SoapAction = soapAction,
                 Uri = uri,
-                Certificate = _signingCertificate
+                Certificate = _httpClient.ClientCertificate
             };
 
             byte[] docBytes = _wusDocument.CreateDocumentBytes(wusDocumentInfo);
