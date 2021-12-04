@@ -11,7 +11,7 @@ The recommended successor to WCF on .NET Core is [gRPC](https://grpc.io/), howev
 This C# example has its own WS-* protocol implementation, with the main part located in the **WusXmlDSig.cs** file. The rest of the implementation is pretty straightforward, using LINQ to XML, serializers, extensions and exceptions.
 
 ### Requirements
-- .NET Core 3.1
+- .NET Core 6.0
 - PKIo X.509 (test) certificate for identification and signing
 
 **Note:** All development and testing has been done under Linux.
@@ -22,7 +22,7 @@ This C# example has its own WS-* protocol implementation, with the main part loc
 - Main entrypoint is in WusClient/Program.cs
 - Unit tests can be run using `dotnet test -l "console;verbosity=normal"`
 - Make sure your PKIo certifcate can be found, either through the certificate store or from the local filesystem
-- You should be all set to run: `dotnet run -p WusClient` from the solution directory
+- You should be all set to run: `dotnet run --project WusClient` from the solution directory
 - The sample code runs again the Digipoort conformance or preprod environment
 
 ### Remarks

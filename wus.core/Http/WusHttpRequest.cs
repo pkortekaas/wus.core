@@ -1,9 +1,11 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using System.Threading.Tasks;
 using CoreWUS.Extensions;
 
 // https://github.com/pierodetomi/dotnet-webutils/tree/master/DotNet.WebUtils
@@ -26,7 +28,10 @@ namespace CoreWUS
             _logger = logger;
         }
 
-        public string Post(Uri url, string soapAction, byte[] data)
+        public string Post(Uri url, string soapAction, byte[] data) => PostAsync(url, soapAction, data).Result;
+
+        [SuppressMessage("Microsoft.CodeAnalysis.FxCopAnalyzers", "CA2007:ConfigureAwait")]
+        public async Task<string> PostAsync(Uri url, string soapAction, byte[] data)
         {
             _logger?.Log(LogLevel.Debug, "Start");
             Utils.CheckNullArgument(url, "url");
@@ -39,21 +44,22 @@ namespace CoreWUS
             request.ContentLength = data.Length;
             request.Headers.Add("SOAPAction", soapAction);
 
-            string result = ExecutePostRequest(request, data);
+            string result = await ExecutePostAsync(request, data);
             _logger?.Log(LogLevel.Debug, "End");
             return result;
         }
 
-        private static string ExecutePostRequest(HttpWebRequest request, byte[] body)
+        [SuppressMessage("Microsoft.CodeAnalysis.FxCopAnalyzers", "CA2007:ConfigureAwait")]
+        private static async Task<string> ExecutePostAsync(HttpWebRequest request, byte[] body)
         {
             string data = null;
 
             using (Stream requestStream = request.GetRequestStream())
             {
-                requestStream.Write(body, 0, body.Length);
+                await requestStream.WriteAsync(body, 0, body.Length);
             }
 
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (HttpWebResponse response = (HttpWebResponse)await request.GetResponseAsync())
             {
                 if (response.IsSuccessStatusCode())
                 {
@@ -61,7 +67,7 @@ namespace CoreWUS
                     {
                         using (StreamReader sr = new StreamReader(responseStream, Encoding.UTF8))
                         {
-                            data = sr.ReadToEnd();
+                            data = await sr.ReadToEndAsync();
                         }
                     }
                     request = null;
