@@ -50,17 +50,15 @@ namespace WusClient
             string scenario = scenarios[0];
             bool preprod = false;
 
-            string baseUrl = "https://cs-bedrijven.procesinfrastructuur.nl";
-            string deliveryUrl = "https://cs-bedrijven.procesinfrastructuur.nl/cpl/aanleverservice/1.2";
-            string statusUrl = "https://cs-bedrijven.procesinfrastructuur.nl/cpl/statusinformatieservice/1.2";
+            string baseUrl = "https://cs-bedrijven.procesinfrastructuur.nl/cpl/";
+            string deliveryUrl = "aanleverservice/1.2";
+            string statusUrl = "statusinformatieservice/1.2";
             string serverCertificateThumbprint = "7C46D36D7D8B5B5CB14FCC6DDBCD551BDB8B1DD0";
 
             if (preprod)
             {
-                baseUrl = "https://preprod-dgp2.procesinfrastructuur.nl";
-                deliveryUrl = "https://preprod-dgp2.procesinfrastructuur.nl/wus/2.0/aanleverservice/1.2";
-                statusUrl = "https://preprod-dgp2.procesinfrastructuur.nl/wus/2.0/statusinformatieservice/1.2";
-                serverCertificateThumbprint = "0BF50DF180BA027DD3E969A8677C2EA3EA2A8981";
+                baseUrl = "https://preprod-dgp2.procesinfrastructuur.nl/wus/2.0/";
+                serverCertificateThumbprint = "C8B724E50EAF26FF01C59A6D9694FCB0DCBB3E4F";
             }
 
             // quirk to adjust instance name when
@@ -123,7 +121,7 @@ namespace WusClient
                     if (string.IsNullOrEmpty(reference))
                     {
                         logger.Log(LogLevel.Info, "-------------------- Deliver --------------------");
-                        aanleverResponse response = wp.Deliver(request, new Uri(deliveryUrl));
+                        aanleverResponse response = wp.Deliver(request, new Uri(deliveryUrl, UriKind.Relative));
                         reference = response.kenmerk;
                         logger.Log(LogLevel.Info, $"Aanleverkenmerk: {response.aanleverkenmerk}");
                         logger.Log(LogLevel.Info, $"Kenmerk: {reference}");
@@ -135,7 +133,7 @@ namespace WusClient
                         kenmerk = reference,
                         autorisatieAdres = noAusp
                     };
-                    IEnumerable<StatusResultaat> statusResponse = wp.NewStatusProcess(statusNewRequest, new Uri(statusUrl));
+                    IEnumerable<StatusResultaat> statusResponse = wp.NewStatusProcess(statusNewRequest, new Uri(statusUrl, UriKind.Relative));
                     foreach (StatusResultaat statusResultaat in statusResponse)
                     {
                         logger.Log(LogLevel.Info, $"Status: {statusResultaat.statuscode} - {statusResultaat.statusomschrijving}");
@@ -147,7 +145,7 @@ namespace WusClient
                         kenmerk = reference,
                         autorisatieAdres = noAusp
                     };
-                    statusResponse = wp.AllStatusProcess(statusAllRequest, new Uri(statusUrl));
+                    statusResponse = wp.AllStatusProcess(statusAllRequest, new Uri(statusUrl, UriKind.Relative));
                     foreach (StatusResultaat statusResultaat in statusResponse)
                     {
                         logger.Log(LogLevel.Info, $"Status: {statusResultaat.statuscode} - {statusResultaat.statusomschrijving}");
