@@ -53,7 +53,7 @@ namespace WusClient
             string baseUrl = "https://cs-bedrijven.procesinfrastructuur.nl/cpl/";
             string deliveryUrl = "aanleverservice/1.2";
             string statusUrl = "statusinformatieservice/1.2";
-            string serverCertificateThumbprint = "7C46D36D7D8B5B5CB14FCC6DDBCD551BDB8B1DD0";
+            string serverCertificateThumbprint = "03035D253D775796F68B7C2E22C15B16DE0C9954";
 
             if (preprod)
             {
