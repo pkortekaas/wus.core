@@ -58,7 +58,7 @@ namespace WusClient
             if (preprod)
             {
                 baseUrl = "https://preprod-dgp2.procesinfrastructuur.nl/wus/2.0/";
-                serverCertificateThumbprint = "C8B724E50EAF26FF01C59A6D9694FCB0DCBB3E4F";
+                serverCertificateThumbprint = "DB0EC66D08626E6D73B2DD589447E4E7CA489B56";
             }
 
             // quirk to adjust instance name when
