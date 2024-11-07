@@ -53,12 +53,12 @@ namespace WusClient
             string baseUrl = "https://cs-bedrijven.procesinfrastructuur.nl/cpl/";
             string deliveryUrl = "aanleverservice/1.2";
             string statusUrl = "statusinformatieservice/1.2";
-            string serverCertificateThumbprint = "03035D253D775796F68B7C2E22C15B16DE0C9954";
+            string serverCertificateThumbprint = "83AB80E04509C30D4155C208DBBA581C510C6ECF";
 
             if (preprod)
             {
                 baseUrl = "https://preprod-dgp2.procesinfrastructuur.nl/wus/2.0/";
-                serverCertificateThumbprint = "C8B724E50EAF26FF01C59A6D9694FCB0DCBB3E4F";
+                serverCertificateThumbprint = "EB2200FBB57256C1022D614973BCBBF6891266DD";
             }
 
             // quirk to adjust instance name when
