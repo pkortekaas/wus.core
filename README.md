@@ -11,7 +11,7 @@ The recommended successor to WCF on .NET Core is [gRPC](https://grpc.io/), howev
 This C# example has its own WS-* protocol implementation, with the main part located in the **WusXmlDSig.cs** file. The rest of the implementation is pretty straightforward, using LINQ to XML, serializers, extensions and exceptions.
 
 ### Requirements
-- .NET Core 6.0
+- .NET Core 8.0
 - PKIo X.509 (test) certificate for identification and signing
 
 **Note:** All development and testing has been done under Linux.
